@@ -1,0 +1,21 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Qwen3.5-9B 的 CPU 维护试验 · Junzhe Wang</title><meta name="description" content="固定模型与受保护验收下的两次真实 CPU 维护尝试：请求超时、读取恢复及可复现证据。"><link rel="stylesheet" href="../style.css"><style>.essay{max-width:850px;font-size:1rem}.essay h1{font-size:2.7rem}.essay h2{font-size:1.5rem;margin:38px 0 16px}.essay p,.essay li{color:#53655a}.essay code{overflow-wrap:anywhere}.essay pre{padding:20px;background:#162b20;color:#dbefdf;overflow:auto;line-height:1.8}.table-scroll{overflow-x:auto}.essay table{width:100%;border-collapse:collapse;font-size:1rem}.essay th,.essay td{text-align:left;padding:12px 10px;border-bottom:1px solid #dce3dd}.essay .scope{border-left:3px solid #528b60;padding:16px 22px;background:#edf2ee}.essay a{color:#275f3c}@media(max-width:680px){.essay h1{font-size:2rem}.essay td,.essay th{padding:10px 6px}}</style></head><body><header class="header wrap"><a class="brand" href="../index.html"><span class="monogram">JW</span><span>JUNZHE WANG<span class="brand-sub">ENGINEERING & RESEARCH</span></span></a><a class="text-link" href="../index.html#lab">回到实验室</a></header><main class="wrap section essay"><p class="eyebrow">REAL MODEL / CPU / 2026.11.21</p>
+<h1>换了模型之后，<br>先看请求预算。</h1>
+<p>没有空闲 GPU 时，在服务器以四线程 CPU 运行固定 Qwen3.5-9B Q4_K_M，尝试修复 Deep Agents 的真实路径规范化问题。沿用固定原版测试和语法导出保护，只更换模型预设与声明采样；正常和检查点恢复两种场景都实际执行。</p>
+<p class="scope">两场均因单次请求 180 秒超时失败：没有虚拟文件改动、导出补丁或官方验收。这是同一个公开问题的两个运行场景，不能当成通用修复率，也不能隔离出模型能力与 CPU 资源的影响。</p>
+<h2>区分请求超时与场景上限</h2>
+<div class="table-scroll"><table><thead><tr><th>场景</th><th>总耗时</th><th>保存的模型回复 / 工具结果</th><th>结果</th></tr></thead><tbody><tr><td>正常</td><td>185.324 秒</td><td>0 / 0</td><td>单请求超时</td></tr><tr><td>检查点恢复</td><td>376.219 秒</td><td>2 / 4</td><td>单请求超时</td></tr></tbody></table></div>
+<p>每场 600 秒、40 个图步骤，每次请求最多生成 1536 token、180 秒、零重试；没有追加修复轮次或事后延长预算。两场未到 600 秒上限，均以 OpenAITimeoutError 退出。</p>
+<p>普通运行仅处理 2442 个提示 token 就用了 172.58 秒。原生服务共启动四个请求：两个完整回复、两个取消；最后一个请求在 154.67 秒时只观察到 2048 个提示 token、约 67% 进度。可观察的瓶颈是当前 CPU 配置下的提示处理与请求预算，不能据此评价该模型的一般编程能力。</p>
+<h2>恢复了读取状态，还没有发生编辑</h2>
+<p>恢复试验先实际完成两次 read_file，再由驱动 SIGKILL worker。使用相同运行目录续跑后，又完成两次分段读取。只读检查最终数据库确认：两条模型回复、四条成功读取、零虚拟内容改动。没有发起额外生成来审计检查点。</p>
+<p>这支持读取状态保留与继续执行；没有验证已编辑文件恢复或完整维护成功。两个场景按顺序共享同一服务和提示缓存，恢复场景受益于热缓存，耗时不能作冷启动或恢复开销的控制对比。</p>
+<h2>把模型身份和运行条件固定下来</h2>
+<p>量化文件来自 lmstudio-community，固定 revision <code>1379f25c</code>，大小 5,627,044,256 字节，逐字节 SHA 与官方托管元数据匹配。只读 GGUF 检查得到 qwen35 架构、427 个张量、约 89.54 亿参数；聊天模板与固定原版模板哈希一致。</p>
+<p>量化方注明 Qwen3.5-9B 来源，但未给出精确原权重 revision。本次抓取的官方模型卡与配置仅是参考身份，不冒称已验证权重转换血缘。运行时为未改动的官方 llama.cpp b12576，文本模式、禁用思考、无视觉投影器、零 GPU 层。</p>
+<p>采样显式声明 temperature 0.7、top_p 0.8、presence_penalty 1.5、top_k 20、min_p 0、repeat_penalty 1、seed 42。1536 token 的短工具回合上限不同于厂商长推理条件；新模型、采样和受保护验收与旧 4B 试验同时变化，不作因果提升结论。</p>
+<h2>工程验证和清理也保留失败事实</h2>
+<p>实际生成前，服务器完整 57 项项目检查为 43 通过、14 跳过（该环境缺少 jsonschema）；包含新增的显式采样 HTTP 传输检查。假服务检查只验证接口，不计作神经维护成绩。验收策略已配置，但没有候选补丁进入验收。</p>
+<p>模型服务只监听 loopback，限制四线程、48 GiB 地址空间、36 GiB RSS 和总运行时限。结束后核验自有进程身份并向启动器发送 SIGTERM；原生子进程没有在十秒宽限期内退出，最终被 SIGKILL 回收。已确认端口关闭、两个进程消失，不把强制清理写成正常退出。最初检查命令漏写依赖库目录的 /lib 导致失败，修正参数后才开始生成，该失败日志也保留。</p>
+<ul><li><a href="../reports/qwen35-cpu/report.json">结果、预算与资源边界</a></li><li><a href="../reports/qwen35-cpu/protocol.json">生成前声明的协议</a> · <a href="../reports/qwen35-cpu/prelaunch.json">生成前核验收据</a></li><li><a href="../reports/qwen35-cpu/audit/checkpoint-resume.json">只读恢复审计</a> · <a href="../reports/qwen35-cpu/service/server.log">实际原生推理日志</a></li><li><a href="../reports/qwen35-cpu/README.md">文件清单、许可和完整限制</a> · <a href="../reports/qwen35-cpu/artifacts.json">原始与公开哈希</a></li><li><a href="https://github.com/1137423918/AgentReliabilityLab/blob/main/docs/qwen35-maintenance.md">复现命令和固定模型身份</a></li></ul>
+<p>来源：<a href="https://huggingface.co/Qwen/Qwen3.5-9B/tree/c202236235762e1c871ad0ccb60c8ee5ba337b9a">固定 Qwen 官方模型资料</a>、<a href="https://huggingface.co/lmstudio-community/Qwen3.5-9B-GGUF/tree/1379f25c6b505a3fc737bd7818cb09389cf807c1">固定量化方资料</a>。完整对话、检查点数据库、worktree 和权重均留在私人实验目录。</p>
+</main><footer class="wrap footer"><span>© 2026 Junzhe Wang</span><a href="../index.html">返回个人主页</a></footer></body></html>

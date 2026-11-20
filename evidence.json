@@ -88,6 +88,25 @@
       "launcher_checks_passed": 3,
       "launcher_checks_separate_from_core_33_and_parser_14": true,
       "model_service_stopped": true
+    },
+    "qwen35_cpu_maintenance": {
+      "status": "both_individual_requests_timed_out_no_patch",
+      "model": "Qwen3.5-9B Q4_K_M",
+      "report": "reports/qwen35-cpu/report.json",
+      "article": "notes/qwen35-maintenance.html",
+      "task_sha256": "e3bfe9b98bfa1d82e8e5f8e32458c8c1d15b6fce6333285c1b8f4e12d33a5450",
+      "planned_trials": 2,
+      "verified_trials": 0,
+      "tool_results": {
+        "normal": 0,
+        "checkpoint-resume": 4
+      },
+      "virtual_changes": 0,
+      "official_acceptance_reached": false,
+      "read_state_continuation_observed": true,
+      "edited_file_recovery_exercised": false,
+      "model_service_stopped": true,
+      "forced_native_child_cleanup": true
     }
   },
   "contributions": [
@@ -287,7 +306,7 @@
   "protected_grading": {
     "status": "verified_scripted_controls",
     "neural_generation": false,
-    "new_protected_model_task": "not_run",
+    "new_protected_model_task": "original 4B preset not run; same acceptance exercised with Qwen3.5 preset in two actual trials; no neural candidate reached grading",
     "task_sha256": "a84509d30691b2c748b25c636327305fa57103f00cacccafe8b1fe26444719bb",
     "report": "reports/protected-grading/report.json",
     "notes": "notes/protected-grading.html",
@@ -315,5 +334,12 @@
       "Python syntax check uses worker Python 3.11 grammar",
       "not a hostile-code OS sandbox"
     ]
+  },
+  "current_project_tests": {
+    "total": 57,
+    "passed": 43,
+    "skipped": 14,
+    "skip_reason": "jsonschema absent",
+    "report": "reports/qwen35-cpu/logs/worker-tests.log"
   }
 }

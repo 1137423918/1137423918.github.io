@@ -166,5 +166,24 @@
       "old_verifier_stopped_before_lock_release": true,
       "same_patch": true
     }
-  }
+  },
+  "maintenance_targets": [
+    {
+      "repository": "langchain-ai/deepagents",
+      "reference_recovery_cases": 4,
+      "upstream_tests_per_case": 119,
+      "model_mode": "scripted",
+      "report": "reports/recovery/report.json"
+    },
+    {
+      "repository": "OpenHands/software-agent-sdk",
+      "reference_recovery_cases": 4,
+      "upstream_tests_per_case": 184,
+      "permission_acceptance": "passed",
+      "patch_sha256": "026981ba94bccb42cb210dc5ff99a3ce050a9d566051f0e06ecd9cedd951177e",
+      "model_mode": "scripted",
+      "model_inference": false,
+      "report": "reports/openhands-maintenance/report.json"
+    }
+  ]
 }

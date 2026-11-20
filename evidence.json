@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-20",
+  "updated": "2026-11-21",
   "upstream": {
     "name": "langchain-ai/deepagents",
     "commit": "744a797e3b9495539ca35571eeffd112a205f5c8",
@@ -256,5 +256,37 @@
     "feedback_boundary_sigkill": "verified",
     "same_final_patch": true,
     "neural_model_metrics": null
+  },
+  "protected_grading": {
+    "status": "verified_scripted_controls",
+    "neural_generation": false,
+    "new_protected_model_task": "not_run",
+    "task_sha256": "a84509d30691b2c748b25c636327305fa57103f00cacccafe8b1fe26444719bb",
+    "report": "reports/protected-grading/report.json",
+    "notes": "notes/protected-grading.html",
+    "same_bad_patch_across_policies": true,
+    "original_tests_for_bad_candidate": {
+      "passed": 112,
+      "failed": 1
+    },
+    "reference": {
+      "original_tests_passed": 113,
+      "candidate_tests_passed": 119,
+      "independent_contracts_passed": 28,
+      "counts_overlap": true
+    },
+    "legacy_worker_rejected_at_verification": true,
+    "recorded_invalid_model_text_rejected_before_export": true,
+    "full_project_tests": {
+      "total": 56,
+      "passed": 42,
+      "skipped": 14,
+      "skip_reason": "jsonschema not installed in this worker environment"
+    },
+    "limitations": [
+      "scripted controls, not neural repair success",
+      "Python syntax check uses worker Python 3.11 grammar",
+      "not a hostile-code OS sandbox"
+    ]
   }
 }

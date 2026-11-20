@@ -18,7 +18,16 @@
   },
   "model_evaluation": {
     "status": "not_run",
-    "metrics": null
+    "metrics": null,
+    "readiness": {
+      "status": "verified_inference_not_run",
+      "report": "reports/model-readiness/report.json",
+      "model_artifacts_verified": true,
+      "baseline_contracts_passed": 22,
+      "reference_contracts_passed": 28,
+      "total_contracts": 28,
+      "launch": "no_free_gpu; model not loaded"
+    }
   },
   "contributions": [
     {
@@ -79,10 +88,11 @@
     "model_mode": "scripted",
     "scope": "real repository and verification; scripted model; process-boundary faults only",
     "project_tests": {
-      "total": 21,
-      "passed": 21,
+      "total": 26,
+      "passed": 26,
       "worker_tests": 13,
-      "evidence_tests": 8
+      "evidence_tests": 8,
+      "transport_and_pilot_fixture_tests": 5
     },
     "base_commit": "744a797e3b9495539ca35571eeffd112a205f5c8",
     "task_sha256": "1f8426173527e962ee58b64d64929a7011d7cfbf1498617d73bb5ceb2c079aad",

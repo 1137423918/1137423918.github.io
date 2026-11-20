@@ -17,17 +17,38 @@
     "package_regression": "verified"
   },
   "model_evaluation": {
-    "status": "not_run",
-    "metrics": null,
+    "status": "cpu_trials_executed_no_verified_patch",
+    "metrics": {
+      "scope": "one_public_maintenance_problem_two_precision_variants_two_modes_each",
+      "variants": [
+        {
+          "precision": "FP32",
+          "attempted_trials": 2,
+          "verified_patches": 0
+        },
+        {
+          "precision": "dynamic_INT8_mixed_FP32",
+          "attempted_trials": 2,
+          "verified_patches": 0
+        }
+      ],
+      "model_tool_progress_recovery_validated": false,
+      "official_acceptance_reached": false,
+      "generation_time_censored": true,
+      "tool_format_interoperability": "unresolved"
+    },
     "readiness": {
-      "status": "verified_inference_not_run",
+      "status": "historical_readiness_verified",
       "report": "reports/model-readiness/report.json",
       "model_artifacts_verified": true,
       "baseline_contracts_passed": 22,
       "reference_contracts_passed": 28,
       "total_contracts": 28,
-      "launch": "no_free_gpu; model not loaded"
-    }
+      "launch": "historical GPU launch: no free GPU; subsequent CPU model trials recorded separately"
+    },
+    "real_neural_generation": true,
+    "gpu_inference_run": false,
+    "report": "reports/cpu-model/report.json"
   },
   "contributions": [
     {

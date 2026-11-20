@@ -14,8 +14,13 @@
 <p>CPU 为 Xeon E5-2699 v4，Torch 2.8.0、Transformers 4.57.1；使用 4 个计算线程、nice 19、48 GiB 地址空间与 36 GiB RSS 上限。服务只监听本机回环地址。INT8 对除输出头外的 252 个 Linear 层做动态量化，其他部分仍为 FP32，原始权重不改写。</p>
 <p>模型 revision 为 <code>cdbee75f17c01a7cc42f958dc650907174af0554</code>；12 个文件共 8,060,915,998 字节，按固定官方元数据重新校验。两份服务源码、独立协议、七次真实生成响应、日志与哈希均公开。完整维护请求、检查点数据库和工作区不公开。</p>
 <p>本轮模型服务均已核对进程身份后关闭。短文本 smoke 只用于验证传输；没有用单次延迟声称通用加速比，也没有把 INT8 的 token 增多解释为质量提升。该服务是实验接口，不是生产推理平台。</p>
+<h2 id="compat">后续：接通一次工具调用</h2>
+<p>针对上述输出，服务新增显式 JSON / 括号 JSON 兼容模式，并校验本次声明的函数与参数。未知函数、错误参数、重复 JSON 键、截断批次和说明文字中的调用示例均不触发工具。最终 14 项服务器解析检查通过，四份原维护输出仍然没有工具调用。</p>
+<p>随后另行声明一个短只读往返试验：用新鲜模型生成重发旧诊断的同一请求，成功解析一个 <code>read_file /sample.py</code>，执行器实际读取测试文件一次。返回工具结果后，第二次模型响应却是文本 <code>None</code>，未满足逐字返回内容的验收。因此完整往返仍记录为失败，不能计为维护成功。</p>
+<p>事后用固定 tokenizer 重建第二次输入，确认实际文件标记已进入工具响应、输入为 250 token；这项检查没有加载权重，也不足以判断失败根因。模型使用的精确服务版本、后续解析边界修复的版本分别保存；当前代码对两份新输出的回放验证通过，未冒称为该边界再次跑过模型。</p>
+<ul><li><a href="../reports/tool-compat/report.json">新协议、两次生成、工具执行与失败报告</a></li><li><a href="../reports/tool-compat/parser-tests.log">最终 14 项解析检查</a></li><li><a href="../reports/tool-compat/outputs/cpu-tool-roundtrip-20261120/1.response.json">第二次响应的原始结果</a></li><li><a href="https://github.com/1137423918/AgentReliabilityLab/blob/main/docs/tool-format-compat.md">格式规则、源码版本与复现</a></li></ul>
 <h2>可以继续解决的问题</h2>
-<p>下一步先用这些真实输出建立格式兼容检查，明确允许的函数、参数和拒绝条件；同时检查模型获得的文件清单上下文。修改后另行声明新试验，保留当前四次失败。待空闲 GPU 可用，再测更多任务与真实模型工具进度恢复。</p>
+<p>已准备列明两条虚拟文件路径的维护任务变体，验收和预算保持不变，尚未运行。接下来需要检查模型如何利用工具返回，再在可用资源上运行维护任务与真实模型工具进度恢复。当前四次维护失败和本次完整往返失败都继续保留。</p>
 <ul><li><a href="../reports/cpu-model/report.json">逐次请求、失败状态与文件哈希</a></li><li><a href="../reports/cpu-model/int8/responses/1776907efdc84a249154676e1e08a46d.text">短诊断的原始生成文本</a></li><li><a href="../reports/cpu-model/fp32/pilot/normal/resumed.stderr.log">保留的 FP32 正常模式失败</a></li><li><a href="https://github.com/1137423918/AgentReliabilityLab/blob/main/docs/cpu-model-pilot.md">完整环境、协议与复现命令</a></li><li><a href="https://github.com/1137423918/AgentReliabilityLab/tree/main/evidence/cpu-model">全部证据与服务源码快照</a></li><li><a href="recovery.html">已有的脚本恢复与修复验证</a></li></ul>
 <p>实现依据：<a href="https://huggingface.co/docs/transformers/v4.57.1/en/chat_extras">Transformers 原生工具模板</a>、<a href="https://huggingface.co/docs/transformers/v4.57.1/en/main_classes/text_generation">生成时限说明</a>、<a href="https://docs.pytorch.org/docs/2.8/generated/torch.ao.quantization.quantize_dynamic.html">PyTorch 动态量化</a>。</p>
 </main><footer class="wrap footer"><span>© 2026 Junzhe Wang</span><a href="../index.html">返回个人主页</a></footer></body></html>

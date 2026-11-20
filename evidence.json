@@ -48,7 +48,21 @@
     },
     "real_neural_generation": true,
     "gpu_inference_run": false,
-    "report": "reports/cpu-model/report.json"
+    "report": "reports/cpu-model/report.json",
+    "tool_compatibility": {
+      "status": "one_fresh_declared_tool_executed_full_fixture_roundtrip_failed",
+      "report": "reports/tool-compat/report.json",
+      "real_model_requests": 2,
+      "actual_read_only_fixture_tool_executions": 1,
+      "full_roundtrip_verified": false,
+      "final_model_text": "None",
+      "parser_checks_passed": 14,
+      "parser_checks_separate_from_core_33": true,
+      "new_maintenance_task_with_file_inventory": "prepared_not_run",
+      "model_tested_service_source_sha256": "883db1be34f330f2015811e5fd6248e7a42478d95307be0995cae633fe56ea03",
+      "current_service_source_sha256": "5f7bd41ca575117bd7ed0e39212a488a0b79382436c79f60bf070cdcd3e329e8",
+      "current_parser_replay_verified": true
+    }
   },
   "contributions": [
     {

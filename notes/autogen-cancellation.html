@@ -1,0 +1,27 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AutoGen 取消回调的死锁 · Junzhe Wang</title><meta name="description" content="真实取消流程中的回调重入死锁：六项原版失败、233项核心包回归与个人fork候选。"><link rel="stylesheet" href="../style.css"><style>.essay{max-width:850px;font-size:1rem}.essay h1{font-size:2.7rem}.essay h2{font-size:1.5rem;margin:38px 0 16px}.essay p,.essay li{color:#53655a}.essay code{overflow-wrap:anywhere}.essay pre{padding:20px;background:#162b20;color:#dbefdf;overflow:auto;line-height:1.8}.table-scroll{overflow-x:auto}.essay table{width:100%;border-collapse:collapse;font-size:1rem}.essay th,.essay td{text-align:left;padding:12px 10px;border-bottom:1px solid #dce3dd}.essay .scope{border-left:3px solid #528b60;padding:16px 22px;background:#edf2ee}.essay a{color:#275f3c}@media(max-width:680px){.essay h1{font-size:2rem}.essay td,.essay th{padding:10px 6px}}</style></head><body><header class="header wrap"><a class="brand" href="../index.html"><span class="monogram">JW</span><span>JUNZHE WANG<span class="brand-sub">ENGINEERING & RESEARCH</span></span></a><a class="text-link" href="../index.html#lab">回到实验室</a></header><main class="wrap section essay"><p class="eyebrow">CANCELLATION / CALLBACKS / 2026.11.21</p>
+<h1>取消任务时，<br>别让清理回调等住自己的锁。</h1>
+<p>长任务需要可靠的取消与资源清理。AutoGen 的 CancellationToken 在持有非重入锁时执行回调；清理回调若查询取消状态、注册另一个清理回调，或等待另一个读取 token 的线程，就可能被这把锁挡住。</p>
+<p class="scope">在授权服务器 CPU 上完成公共 API 与真实 AgentRuntime 复现。候选完整核心包测试 233 项通过。上游已归档只读，创建 PR 被 GitHub 拒绝；修复保留在个人 fork，没有新 AutoGen 上游 PR。</p>
+<h2>一个会卡住的公共调用</h2>
+<pre>token = CancellationToken()
+token.add_callback(lambda: print(token.is_cancelled()))
+token.cancel()</pre>
+<p>取消已经发生，回调本应读到 True 并返回。但原版 cancel 持锁调用回调，is_cancelled 又尝试获取同一把锁。给已经取消的 token 登记回调时，原版 add_callback 也会在锁内执行它。</p>
+<p>回归还覆盖回调等待另一个线程读取状态的情况；即使仅换成 RLock，另一个线程仍不能取得尚未释放的锁，因此需要调整回调的执行范围。</p>
+<h2>保留状态互斥，释放锁后执行回调</h2>
+<p>候选在锁内确认取消状态并复制回调列表，再释放锁逐个调用。回调登记也只在锁内判断状态或保存；已经应当执行的回调离开锁后调用。future 关联复用同一登记路径，保持重复取消不重复执行。</p>
+<pre>lock: set cancelled, snapshot callbacks
+unlock
+invoke callbacks</pre>
+<p>回调仍同步执行，也仍可能自身阻塞或抛异常；没有新增回调超时、异常隔离或强制终止线程。跨线程调用 asyncio Future.cancel 的循环归属问题另有 <a href="https://github.com/microsoft/autogen/pull/8359">PR #8359</a>，本候选没有冒称解决它。</p>
+<h2>从线程回归到真实运行时</h2>
+<div class="table-scroll"><table><thead><tr><th>范围</th><th>观察</th></tr></thead><tbody><tr><td>原版取消测试文件</td><td>6 失败 / 4 通过；6 项新死锁全部复现</td></tr><tr><td>候选完整 autogen-core 测试目录</td><td>233 通过 / 3 项既有警告</td></tr><tr><td>改动的生产与测试文件</td><td>Ruff、Mypy、Pyright 通过</td></tr></tbody></table></div>
+<p>七项新增检查包含在 233 内，其中一项 future 兼容检查在原版也通过。两个测试范围不同，没有声称原版完整 233 项的前后对照。三项警告来自既有的可信 FunctionTool 配置加载提示，保留在日志中；没有运行整个多包、操作系统和 Python 版本矩阵。</p>
+<p>公共复现驱动启动实际 SingleThreadedAgentRuntime，等待一个受控请求进入处理器，再调用带清理回调的取消流程。原版输出 agent_waiting 和 cleanup_entered 后卡住，线程栈定位到 is_cancelled；驱动在 20 秒预算后回收自有子进程。候选完成一次清理、取消请求与处理器，并关闭运行时。</p>
+<p>两者使用相同驱动和最终解释器。等待任务是受控构造，SDK 和运行时是真实实现；没有神经模型、付费 API、GPU 或外部 Agent 服务。原版耗时被超时截断，不能计算加速比或吞吐提升。</p>
+<h2>候选验证与上游状态分开记录</h2>
+<p><a href="https://github.com/1137423918/autogen/tree/fix/cancellation-callback-deadlock">个人 fork 中的候选</a> 固定基线 83909851，提交 2475b3c。投稿接口返回“Repository was archived so is read-only”，随后元数据也确认归档。没有重复投稿或把 fork 分支写成已接受贡献；现有的两个其他框架草稿 PR 保持独立状态。</p>
+<p>AutoGen 的新项目方向已转向 Microsoft Agent Framework，这项工作属于既有 SDK 的缺陷验证，不将它宣传为最新主推框架。初次完整核心包检查因缺少两个测试依赖而出现收集错误；初次 Pyright 缺少 Node 的 libatomic。补齐任务内依赖与进程级库路径后通过，原始失败均保留。</p>
+<ul><li><a href="../reports/autogen-cancellation/report.json">结果、源码与范围</a> · <a href="../reports/autogen-cancellation/upstream-status.json">归档与未创建 PR 的收据</a></li><li><a href="../reports/autogen-cancellation/cases/baseline/stderr.log">原版线程栈</a> · <a href="../reports/autogen-cancellation/cases/candidate/report.json">候选实际取消流程</a></li><li><a href="../reports/autogen-cancellation/logs/candidate-core.log">233 项核心包回归</a> · <a href="../reports/autogen-cancellation/fix.patch">最小补丁</a></li><li><a href="../reports/autogen-cancellation/README.md">全部证据与边界</a> · <a href="https://github.com/1137423918/AgentReliabilityLab/blob/main/docs/autogen-cancellation.md">复现命令</a></li></ul>
+<p>依据：<a href="https://github.com/microsoft/autogen/tree/8390985108cb1e3881f5f7297765758d8ad2540c">固定上游源码</a>、<a href="https://github.com/microsoft/autogen">上游当前状态</a>。补丁与代码片段保留 MIT 许可；这不是生产事故报告、模型修复成绩或新运行时适配器。</p>
+</main><footer class="wrap footer"><span>© 2026 Junzhe Wang</span><a href="../index.html">返回个人主页</a></footer></body></html>

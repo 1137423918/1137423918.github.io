@@ -154,6 +154,24 @@
       "not_an_agent_runtime_adapter": true,
       "cla_check": "failure_matching_agreement_not_found",
       "upstream_status": "reports/adk-artifact-cleanup/upstream-status.json"
+    },
+    {
+      "project": "microsoft/autogen",
+      "status": "fork_candidate_upstream_archived",
+      "url": "https://github.com/1137423918/autogen/tree/fix/cancellation-callback-deadlock",
+      "upstream_pr": null,
+      "pr_creation_http_status": 403,
+      "upstream_archived": true,
+      "merged": false,
+      "base_commit": "8390985108cb1e3881f5f7297765758d8ad2540c",
+      "candidate_commit": "2475b3c5a9eea73b979bc6ed12c1717f68c72a10",
+      "report": "reports/autogen-cancellation/report.json",
+      "upstream_status": "reports/autogen-cancellation/upstream-status.json",
+      "related_core_suite_passed": 233,
+      "existing_warnings": 3,
+      "new_checks_included": 7,
+      "model_inference": false,
+      "not_an_agent_runtime_adapter": true
     }
   ],
   "package_regression": {

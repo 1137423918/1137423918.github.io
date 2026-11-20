@@ -448,5 +448,20 @@
       "total JSON body bytes"
     ],
     "exactly_once_claim": false
+  },
+  "semantic_kernel_cancellation": {
+    "status": "draft_pr_submitted",
+    "article": "notes/semantic-kernel-cancellation.html",
+    "report": "reports/semantic-kernel-cancellation/report.json",
+    "pr": "https://github.com/microsoft/semantic-kernel/pull/14845",
+    "draft": true,
+    "merged": false,
+    "runtime_experimental": true,
+    "scoped_passed": 103,
+    "broader_passed": 182,
+    "broader_failed": 12,
+    "broader_skipped": 1,
+    "old_failure_ids_match_base": true,
+    "model_inference": false
   }
 }

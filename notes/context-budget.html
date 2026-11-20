@@ -11,7 +11,8 @@
 <p>这个已知名称的目标里，grep是更省的基线。AST提供结构、精确边界与当前内容哈希，不能因此宣传成普遍更便宜。根据这次控制结果，我会把“已知名称搜索”和“需要结构及哈希校验”作为不同的选择场景；真实模型能否选对工具，仍需另行验证。</p>
 <h2>不把离线计数写成推理加速</h2>
 <p>参考渲染使用固定Qwen3.5模板字节、Jinja2 3.1.6与关闭thinking的配置；C工具通过固定llama.cpp的GGUF词表做tokenization，vocab_only开启，不创建推理上下文、不加载tensor做推理、不使用GPU。模型、模板、源码、二进制与40份运行库哈希已核对。</p>
-<p>Jinja参考渲染尚未证明与原生minja/server完全等价，因此这是公开渲染文本的准确词表计数，并非真实模型返回的usage。累计逻辑输入重复计算可缓存的前缀，不等于净prefill、耗时、账单或成功率。报告保留prompt前缀相同部分的诊断，但没有模拟实际生成token、reasoning剥离或缓存淘汰。</p>
+<p>后续CPU回放直接调用固定原生服务库的实际请求转换函数：14份提示文本的字节与完整token数组均和历史参考结果一致；独立common-chat路径也一致。这只覆盖这些请求、模板和配置，仍非真实模型返回的usage。累计逻辑输入重复计算可缓存的前缀，不等于净prefill、耗时、账单或成功率。报告保留prompt前缀相同部分的诊断，但没有模拟实际生成token、reasoning剥离或缓存淘汰。</p>
+<p><a href="../reports/native-template/README.md">原生回放证据</a>保留逐请求结果、完整提示/token数组、40份运行库哈希、编译命令与初次失败；<a href="https://github.com/1137423918/AgentReliabilityLab/blob/main/docs/native-template.md">复现说明</a>解释直接调用转换函数的边界。本轮不创建HTTP服务或推理上下文，也不新增模型任务通过成绩。</p>
 <h2>覆盖校验先于结果展示</h2>
 <p>三组都必须返回同样86行原文，且虚拟文件集合和所有文本不变。审计曾因把FileData时间戳当内容、把实际紧凑行头误当编号行而拒绝结果；修正审计后重新运行，仍逐行验证目标和行头/正文数量。原始失败保留，没有通过减少目标换取更小数字。</p>
 <ul><li><a href="../reports/context-budget/report.json">逐请求指标与范围</a> · <a href="../reports/context-budget/protocol.json">运行前固定协议</a> · <a href="../reports/context-budget/runtime.json">环境与运行库核验</a></li><li><a href="../reports/context-budget/literal_grep_then_span/requests.json">实际HTTP JSON体示例</a> · <a href="../reports/context-budget/python_outline_then_symbols/prefix-3.txt">AST完整最终prefix</a></li><li><a href="../reports/context-budget/native-token-ids.jsonl">14组原生token序列</a> · <a href="../reports/context-budget/artifacts.json">字节与哈希清单</a> · <a href="../reports/context-budget/README.md">全部证据和准备失败</a></li><li><a href="https://github.com/1137423918/AgentReliabilityLab/blob/main/docs/context-budget.md">完整复现命令</a> · <a href="source-navigation.html">源码导航的原始恢复实验</a></li></ul>

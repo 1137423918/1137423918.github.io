@@ -404,7 +404,6 @@
     "article": "notes/context-budget.html",
     "report": "reports/context-budget/report.json",
     "model_inference": false,
-    "native_minja_equivalence_verified": false,
     "live_usage_measured": false,
     "http_requests": 14,
     "target_lines_per_policy": 86,
@@ -430,7 +429,9 @@
         "final_context_tokens": 6683,
         "logical_input_tokens": 19054
       }
-    ]
+    ],
+    "original_snapshot_native_minja_equivalence_verified": false,
+    "follow_up_native_replay": "native_template"
   },
   "model_request_budget": {
     "status": "verified_transport_and_recovery",
@@ -480,5 +481,17 @@
     "new_model_trials": false,
     "pdf_visual_reviewed": true,
     "website_browser_verified": false
+  },
+  "native_template": {
+    "status": "verified_for_14_fixed_requests",
+    "report": "reports/native-template/report.json",
+    "evidence": "reports/native-template/README.md",
+    "identical_prompt_bytes": 14,
+    "identical_full_token_arrays": 14,
+    "actual_server_converter_called": true,
+    "http_listener_started": false,
+    "model_inference": false,
+    "live_usage_measured": false,
+    "general_template_equivalence_claim": false
   }
 }

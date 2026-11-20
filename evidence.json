@@ -58,10 +58,36 @@
       "final_model_text": "None",
       "parser_checks_passed": 14,
       "parser_checks_separate_from_core_33": true,
-      "new_maintenance_task_with_file_inventory": "prepared_not_run",
+      "new_maintenance_task_with_file_inventory": "prepared_at_tool_compat_stage; subsequent native CPU trials recorded separately",
       "model_tested_service_source_sha256": "883db1be34f330f2015811e5fd6248e7a42478d95307be0995cae633fe56ea03",
       "current_service_source_sha256": "5f7bd41ca575117bd7ed0e39212a488a0b79382436c79f60bf070cdcd3e329e8",
       "current_parser_replay_verified": true
+    },
+    "native_cpu_maintenance": {
+      "status": "both_cases_deadline_no_exported_patch",
+      "report": "reports/native-cpu/report.json",
+      "article": "notes/native-cpu.html",
+      "model": "Qwen/Qwen3-4B-Instruct-2507",
+      "backend": "llama.cpp b12576",
+      "precision": "Q4_K_M mixed precision",
+      "derived_model_bytes": 2497279264,
+      "derived_model_sha256": "9f1c9b5bd32d1c37502b525a677b3245a1b91fb7b71c7464f4264647998e7a06",
+      "planned_trials": 2,
+      "verified_trials": 0,
+      "model_task_launches": 22,
+      "persisted_model_replies": 20,
+      "canceled_model_tasks": 2,
+      "full_token_accounting_available": false,
+      "tool_results": {
+        "normal": 9,
+        "checkpoint-resume": 13
+      },
+      "navigation_checkpoint_continuation_observed": true,
+      "edited_file_recovery_exercised": false,
+      "maintenance_recovery_succeeded": false,
+      "launcher_checks_passed": 3,
+      "launcher_checks_separate_from_core_33_and_parser_14": true,
+      "model_service_stopped": true
     }
   },
   "contributions": [

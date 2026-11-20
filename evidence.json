@@ -398,5 +398,38 @@
       "scheduler_timeout_root_cause": "unresolved; isolated pass does not erase broad failure"
     },
     "model_inference": false
+  },
+  "context_budget": {
+    "status": "verified_operator_reference_accounting",
+    "article": "notes/context-budget.html",
+    "report": "reports/context-budget/report.json",
+    "model_inference": false,
+    "native_minja_equivalence_verified": false,
+    "live_usage_measured": false,
+    "http_requests": 14,
+    "target_lines_per_policy": 86,
+    "policies": [
+      {
+        "policy": "sequential_200",
+        "tool_calls": 5,
+        "first_request_tokens": 2446,
+        "final_context_tokens": 12330,
+        "logical_input_tokens": 43990
+      },
+      {
+        "policy": "literal_grep_then_span",
+        "tool_calls": 3,
+        "first_request_tokens": 2446,
+        "final_context_tokens": 3658,
+        "logical_input_tokens": 11341
+      },
+      {
+        "policy": "python_outline_then_symbols",
+        "tool_calls": 3,
+        "first_request_tokens": 2732,
+        "final_context_tokens": 6683,
+        "logical_input_tokens": 19054
+      }
+    ]
   }
 }

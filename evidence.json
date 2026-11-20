@@ -354,11 +354,11 @@
     ]
   },
   "current_project_tests": {
-    "total": 63,
-    "passed": 49,
-    "skipped": 14,
-    "skip_reason": "jsonschema absent",
-    "report": "reports/source-navigation/logs/full-tests.log"
+    "total": 74,
+    "passed": 74,
+    "skipped": 0,
+    "environment_change": "dedicated environment now installs jsonschema; 11 new budget checks included; earlier 14 skipped checks now execute",
+    "report": "reports/model-request-budget/logs/full.log"
   },
   "source_navigation": {
     "status": "verified_reference_controls",
@@ -431,5 +431,22 @@
         "logical_input_tokens": 19054
       }
     ]
+  },
+  "model_request_budget": {
+    "status": "verified_transport_and_recovery",
+    "article": "notes/model-request-budget.html",
+    "report": "reports/model-request-budget/report.json",
+    "model_inference": false,
+    "requests_per_reference_case": 3,
+    "reference_cases": 2,
+    "same_request_bodies": true,
+    "same_patch": true,
+    "neural_preset_run": false,
+    "limits_units": [
+      "HTTP attempts",
+      "per-request JSON body bytes",
+      "total JSON body bytes"
+    ],
+    "exactly_once_claim": false
   }
 }

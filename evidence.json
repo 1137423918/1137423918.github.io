@@ -387,11 +387,11 @@
     ]
   },
   "current_project_tests": {
-    "total": 74,
-    "passed": 74,
+    "total": 82,
+    "passed": 82,
     "skipped": 0,
-    "environment_change": "dedicated environment now installs jsonschema; 11 new budget checks included; earlier 14 skipped checks now execute",
-    "report": "reports/model-request-budget/logs/full.log"
+    "environment_change": "Reuses dedicated jsonschema-capable environment with new PYTHONPATH source; includes eight new read-index checks and earlier 11 budget checks. Earlier 14 skipped parser checks execute; groups are not added together.",
+    "report": "reports/read-index/logs/full.log"
   },
   "source_navigation": {
     "status": "verified_reference_controls",
@@ -537,5 +537,27 @@
     "prepared_model_task_run": false,
     "new_worker_framework_adapter": false,
     "matrix_wall_seconds": 470.3863330828026
+  },
+  "python_read_index": {
+    "status": "verified_reference_controls_neural_variant_unrun",
+    "model_inference": false,
+    "article": "notes/source-navigation.html#read-index",
+    "report": "reports/read-index/report.json",
+    "reference_cases": 3,
+    "original_pages_byte_identical": true,
+    "same_patch": true,
+    "annotation_tracks_current_virtual_revision": true,
+    "annotation_byte_limit": 2048,
+    "combined_response_byte_limit": 8192,
+    "annotation_bytes_observed": [
+      2004,
+      2004
+    ],
+    "omitted_definitions_observed": [
+      1,
+      1
+    ],
+    "neural_variant_run": false,
+    "token_latency_repair_gain_measured": false
   }
 }

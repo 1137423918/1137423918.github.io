@@ -336,10 +336,23 @@
     ]
   },
   "current_project_tests": {
-    "total": 57,
-    "passed": 43,
+    "total": 63,
+    "passed": 49,
     "skipped": 14,
     "skip_reason": "jsonschema absent",
-    "report": "reports/qwen35-cpu/logs/worker-tests.log"
+    "report": "reports/source-navigation/logs/full-tests.log"
+  },
+  "source_navigation": {
+    "status": "verified_reference_controls",
+    "model_inference": false,
+    "article": "notes/source-navigation.html",
+    "report": "reports/source-navigation/report.json",
+    "summary": "reports/source-navigation/summary.json",
+    "reference_cases": 2,
+    "edited_production_checkpoint_resumed": true,
+    "same_patch": true,
+    "response_byte_limit": 8192,
+    "neural_preset_run": false,
+    "net_token_latency_gain_measured": false
   }
 }

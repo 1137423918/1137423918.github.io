@@ -372,5 +372,31 @@
     "response_byte_limit": 8192,
     "neural_preset_run": false,
     "net_token_latency_gain_measured": false
+  },
+  "lfx_checkpoint_numeric": {
+    "status": "not_created_workflow_scope_required",
+    "pr": null,
+    "candidate_pushed": false,
+    "merged": false,
+    "article": "notes/lfx-checkpoint-numeric.html",
+    "report": "reports/lfx-checkpoint-numeric/report.json",
+    "focused_passed": 105,
+    "focused_warnings": 5,
+    "new_checks_included": 14,
+    "broad_suite": {
+      "passed": 682,
+      "failed": 3,
+      "skipped": 6,
+      "xfailed": 1,
+      "warnings": 5,
+      "seconds": 247.93,
+      "green": false,
+      "catalog_failures_reproduced_on_base": 2,
+      "scheduler_timeout_in_broad_run": 1,
+      "scheduler_isolated_baseline_passed": 2,
+      "scheduler_isolated_candidate_passed": 2,
+      "scheduler_timeout_root_cause": "unresolved; isolated pass does not erase broad failure"
+    },
+    "model_inference": false
   }
 }

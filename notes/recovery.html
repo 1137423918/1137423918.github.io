@@ -1,0 +1,27 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>任务中断之后，如何继续？ · Junzhe Wang</title><meta name="description" content="真实开源仓库中的持久化检查点、隔离工作区与 SIGKILL 恢复实验。"><link rel="stylesheet" href="../style.css"><style>.essay{max-width:850px}.essay h1{font-size:2.7rem}.essay h2{font-size:1.5rem;margin:38px 0 16px}.essay p,.essay li{color:#53655a}.essay pre{padding:20px;background:#162b20;color:#dbefdf;overflow:auto;font-size:.85rem;line-height:1.8}.essay table{width:100%;border-collapse:collapse;font-size:.9rem}.essay th,.essay td{text-align:left;padding:12px 10px;border-bottom:1px solid #dce3dd}.essay .scope{border-left:3px solid #528b60;padding:16px 22px;background:#edf2ee}.essay a{color:#275f3c}@media(max-width:680px){.essay h1{font-size:2rem}.essay table{font-size:.875rem}.essay td,.essay th{padding:10px 5px}}</style></head><body><header class="header wrap"><a class="brand" href="../index.html"><span class="monogram">JW</span><span>JUNZHE WANG<span class="brand-sub">ENGINEERING & RESEARCH</span></span></a><a class="text-link" href="../index.html#lab">回到实验室</a></header><main class="wrap section essay"><p class="eyebrow">ENGINEERING NOTE / 2026.11.20</p>
+<h1>任务中断之后，<br>如何继续？</h1>
+<p>软件维护任务需要编辑文件、执行测试并交付补丁。进程意外退出后，重新执行所有工具可能覆盖人工修改，也会让已经完成的步骤失去记录。我在 Agent Reliability Lab 中实现了一条可恢复的维护流程，并在真实的 Deep Agents 仓库验证。</p>
+<p class="scope">首轮验证采用固定脚本工具计划，衡量执行基础设施。正常运行与三处真实 SIGKILL 中断后恢复均通过；模型自主维护任务尚未运行。</p>
+<h2>一个可以交付补丁的工作流</h2>
+<ol><li>固定目标仓库 commit、允许编辑的文件和验证命令，生成任务哈希。</li><li>Deep Agents 在 StateBackend 编辑虚拟文件；LangGraph SqliteSaver 持久化工具结果。</li><li>把修改落地到任务专属 Git worktree，生成真实 diff，检查文件范围与人工修改冲突。</li><li>执行预设测试，记录退出码、超时和日志哈希；通过后输出 ready_for_review 与补丁。</li></ol>
+<p>同一运行目录使用文件锁限制单个 worker；恢复时核对任务定义，成功任务重放会检查补丁是否被改动。最终结果供人工审阅，运行器不会自动提交、推送或合并。</p>
+<h2>真实仓库上的四个场景</h2>
+<p>基线固定为 <a href="https://github.com/langchain-ai/deepagents/tree/744a797e3b9495539ca35571eeffd112a205f5c8">Deep Agents / 744a797e</a>。同一任务修改路径规范化逻辑并追加六个回归案例。每次测试前先断言导入的源码来自当前 worktree，避免验证到另一份 editable 安装。</p>
+<table><thead><tr><th>运行方式</th><th>完成工具数</th><th>上游测试</th><th>补丁</th></tr></thead><tbody>
+<tr><td>正常完成</td><td>2</td><td>119 通过</td><td>一致</td></tr>
+<tr><td>首次工具检查点后 SIGKILL</td><td>2</td><td>119 通过</td><td>一致</td></tr>
+<tr><td>补丁落地后 SIGKILL</td><td>2</td><td>119 通过</td><td>一致</td></tr>
+<tr><td>验证前 SIGKILL</td><td>2</td><td>119 通过</td><td>一致</td></tr>
+</tbody></table>
+<p>四次运行输出相同的 1,573 字节补丁。首次检查点中断时已有一条工具结果，恢复轨迹从这一状态继续；后两个场景直接进入后续阶段，没有再次执行模型图。119 条是每个场景运行的同一组上游用例。</p>
+<pre>patch SHA-256
+f5ac2b13753a106a3b8f45fb308acddc3cfba477b841c5dbbcbf0d083f39d406</pre>
+<h2>项目自身的验证</h2>
+<p>服务器上的 18 条项目测试全部通过，其中 10 条测试覆盖运行器。检查了重复执行、并发抢占、任务变更、文件越界、人工修改冲突、测试失败、验证子进程组超时终止、跨重启图步数预算，以及完成后补丁被篡改的情况。</p>
+<p>执行环境为 Linux、Python 3.11.4、Deep Agents 0.7.41、LangGraph 1.2.24 和 SQLite checkpoint 3.1.3。实验只使用 CPU；共享存储冷导入超时的首次失败保留在私人实验记录，随后使用独立 home 环境完成验证。</p>
+<h2>目前能够说明什么</h2>
+<p>结果支持这一个固定维护任务在已测阶段边界中断后，恢复并产生同一份通过测试的补丁。还需要加入更多任务、真实模型与更多故障点，才能评估任务完成率和恢复开销。</p>
+<ul><li>当前仅支持允许列表中的既有 UTF-8 普通文件。</li><li>故障注入覆盖阶段边界；未验证整机断电、验证执行中只杀父 PID 后的孤儿恢复。</li><li>测试命令由操作者明确提供，环境不作为恶意代码安全沙箱。</li><li>崩溃恰好发生在命令结束与结果落盘之间时，测试可能重跑。外部副作用不保证 exactly-once。</li><li>图步数预算跨重启保存；它不等于 token 或费用上限。</li></ul>
+<h2>源码与可检查的证据</h2>
+<ul><li><a href="https://github.com/1137423918/AgentReliabilityLab">项目源码</a></li><li><a href="https://github.com/1137423918/AgentReliabilityLab/blob/main/docs/durable-worker.md">运行方式与边界</a></li><li><a href="https://github.com/1137423918/AgentReliabilityLab/blob/main/tasks/deepagents-path-maintenance.json">固定维护任务定义</a></li><li><a href="../reports/recovery/report.json">四场景结果、版本与补丁哈希</a></li><li><a href="../reports/recovery/worker-tests.log">18 条项目测试日志</a></li><li><a href="../reports/recovery/checkpoint/verification-1.log">检查点恢复后的 119 条上游测试日志</a></li><li><a href="../reports/recovery/checkpoint/patch.diff">恢复后的真实补丁</a></li><li><a href="path-normalization.html">前一阶段：路径问题与 380 条回归</a></li></ul>
+<p>公开记录已经替换私人绝对路径；原始日志哈希与公开副本哈希在报告中分别标注。检查点数据库与完整会话未公开。</p></main><footer class="wrap footer"><span>© 2026 Junzhe Wang</span><a href="../index.html">返回个人主页</a></footer></body></html>

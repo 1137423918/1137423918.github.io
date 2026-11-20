@@ -73,5 +73,65 @@
     "venue": "IEEE Geoscience and Remote Sensing Letters",
     "year": 2025,
     "repository": "https://github.com/1137423918/LS-DETR"
+  },
+  "durable_worker": {
+    "status": "verified",
+    "model_mode": "scripted",
+    "scope": "real repository and verification; scripted model; process-boundary faults only",
+    "project_tests": {
+      "total": 18,
+      "passed": 18,
+      "worker_tests": 10,
+      "evidence_tests": 8
+    },
+    "base_commit": "744a797e3b9495539ca35571eeffd112a205f5c8",
+    "task_sha256": "1f8426173527e962ee58b64d64929a7011d7cfbf1498617d73bb5ceb2c079aad",
+    "packages": {
+      "deepagents": "0.7.41",
+      "langgraph": "1.2.24",
+      "langgraph-checkpoint-sqlite": "3.1.3"
+    },
+    "scenarios": [
+      {
+        "case": "uninterrupted",
+        "signal": null,
+        "status": "ready_for_review",
+        "upstream_tests_passed": 119,
+        "patch_sha256": "f5ac2b13753a106a3b8f45fb308acddc3cfba477b841c5dbbcbf0d083f39d406",
+        "patch_bytes": 1573
+      },
+      {
+        "case": "checkpoint",
+        "signal": "SIGKILL",
+        "status": "ready_for_review",
+        "upstream_tests_passed": 119,
+        "patch_sha256": "f5ac2b13753a106a3b8f45fb308acddc3cfba477b841c5dbbcbf0d083f39d406",
+        "patch_bytes": 1573
+      },
+      {
+        "case": "materialized",
+        "signal": "SIGKILL",
+        "status": "ready_for_review",
+        "upstream_tests_passed": 119,
+        "patch_sha256": "f5ac2b13753a106a3b8f45fb308acddc3cfba477b841c5dbbcbf0d083f39d406",
+        "patch_bytes": 1573
+      },
+      {
+        "case": "before_verification",
+        "signal": "SIGKILL",
+        "status": "ready_for_review",
+        "upstream_tests_passed": 119,
+        "patch_sha256": "f5ac2b13753a106a3b8f45fb308acddc3cfba477b841c5dbbcbf0d083f39d406",
+        "patch_bytes": 1573
+      }
+    ],
+    "report": "reports/recovery/report.json",
+    "notes": "notes/recovery.html",
+    "limitations": [
+      "scripted fixed plan, not autonomous model evaluation",
+      "phase-boundary SIGKILL only, not power loss or parent-only kill during verification",
+      "trusted operator verification commands, not a hostile-code sandbox",
+      "graph step budget, not token or cost budget"
+    ]
   }
 }

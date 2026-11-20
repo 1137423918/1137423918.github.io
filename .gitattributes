@@ -1,2 +1,5 @@
 reports/*.log -whitespace
 reports/*.patch -whitespace
+reports/**/*.log -whitespace
+reports/**/*.jsonl -whitespace
+reports/**/patch.diff -whitespace

@@ -501,19 +501,20 @@
   "portfolio_brief": {
     "page": "project-brief.html",
     "pdf": "downloads/junzhe-wang-project-brief.pdf",
-    "pdf_sha256": "7f0fded58b689bbb1ed48c710cfcf2da58584f93c4c6bfc900187775b712f04a",
+    "pdf_sha256": "3977991be971b88f3cb151dc75e43079fa9efa8a1ed70a3e378d30b53b497328",
     "languages": [
       "zh",
       "en"
     ],
     "pdf_pages": 2,
-    "checked_at": "2026-11-21T05:34:36+08:00",
-    "source_files": 9,
+    "checked_at": "2026-11-21T07:15:52+08:00",
+    "source_files": 11,
     "pr_snapshot_count": 3,
     "new_test_results": false,
     "new_model_trials": false,
     "pdf_visual_reviewed": true,
-    "website_browser_verified": false
+    "website_browser_verified": false,
+    "reference_repositories": 3
   },
   "native_template": {
     "status": "verified_for_14_fixed_requests",

@@ -107,6 +107,27 @@
       "edited_file_recovery_exercised": false,
       "model_service_stopped": true,
       "forced_native_child_cleanup": true
+    },
+    "longer_budget_cpu_maintenance": {
+      "status": "case_wall_limit_no_patch",
+      "article": "notes/qwen35-maintenance.html#long-cpu",
+      "report": "reports/long-cpu/report.json",
+      "planned_trials": 1,
+      "verified_trials": 0,
+      "model_inference": true,
+      "gpu": false,
+      "case_wall_seconds": 1800,
+      "model_turns": 5,
+      "tool_results": 6,
+      "inspect_python_calls": 0,
+      "requests_reserved": 6,
+      "request_body_bytes": 174278,
+      "virtual_changes": 0,
+      "exported_patch": false,
+      "official_acceptance_run": false,
+      "model_service_stopped": true,
+      "first_request_matches_reference_body": true,
+      "full_trial_token_accounting_available": false
     }
   },
   "contributions": [
@@ -310,6 +331,18 @@
       "model_mode": "scripted",
       "model_inference": false,
       "report": "reports/openhands-maintenance/report.json"
+    },
+    {
+      "repository": "google/adk-python",
+      "reference_recovery_cases": 4,
+      "upstream_tests_per_case": 1863,
+      "upstream_xfailed_per_case": 26,
+      "external_contracts_per_case": 4,
+      "model_mode": "scripted",
+      "model_inference": false,
+      "same_patch": true,
+      "new_unique_regressions": 0,
+      "report": "reports/adk-maintenance/report.json"
     }
   ],
   "repair_loop": {
@@ -493,5 +526,15 @@
     "model_inference": false,
     "live_usage_measured": false,
     "general_template_equivalence_claim": false
+  },
+  "adk_maintenance": {
+    "report": "reports/adk-maintenance/report.json",
+    "protocol": "reports/adk-maintenance/protocol.json",
+    "matrix_cases": 4,
+    "same_patch": true,
+    "model_inference": false,
+    "prepared_model_task_run": false,
+    "new_worker_framework_adapter": false,
+    "matrix_wall_seconds": 470.3863330828026
   }
 }

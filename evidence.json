@@ -108,6 +108,33 @@
       "report": "reports/openhands-undo/report.json",
       "related_candidate_tests_passed": 185,
       "model_inference": false
+    },
+    {
+      "project": "google/adk-python",
+      "status": "draft_pr",
+      "url": "https://github.com/google/adk-python/pull/8278",
+      "upstream_pr": 8278,
+      "merged": false,
+      "base_commit": "c81876a49911745248f2b774c02770ed211ff460",
+      "candidate_commit": "c71ca6a2d993ede60f9fd873b768a6d452db116f",
+      "report": "reports/adk-artifact-cleanup/report.json",
+      "related_suites": [
+        {
+          "python": "3.11.4",
+          "passed": 2021,
+          "xfailed": 26
+        },
+        {
+          "python": "3.13.18",
+          "passed": 2021,
+          "xfailed": 26
+        }
+      ],
+      "counts_overlap": true,
+      "model_inference": false,
+      "not_an_agent_runtime_adapter": true,
+      "cla_check": "failure_matching_agreement_not_found",
+      "upstream_status": "reports/adk-artifact-cleanup/upstream-status.json"
     }
   ],
   "package_regression": {

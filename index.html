@@ -18,7 +18,7 @@
   <div class="intro"><p class="eyebrow">PERSONAL FIELD NOTES / AGENT SYSTEMS</p>
     <h1>把 Agent<br>带进真实的<span class="accent">工作流。</span></h1>
     <p class="lead">我是 Junzhe Wang，关注计算机视觉与 Agent 工程。研究轻量化视觉模型，也探索工具调用、执行恢复与可复现的 Agent 评测。</p>
-    <div class="hero-actions"><a class="button" href="#work">查看工程项目</a><a class="text-link" href="#lab">阅读实验记录</a></div>
+    <div class="hero-actions"><a class="button" href="#work">查看工程项目</a><a class="text-link" href="project-brief.html">项目介绍与 PDF</a></div>
     <p class="hero-note">关注方向 <span>Agent Infrastructure / Reliable Tool Use / Evaluation</span></p>
   </div>
   <div class="system-visual" role="img" aria-label="Agent 任务由规划、工具执行、检查点和验证组成，失败时可以从检查点恢复。">
@@ -49,7 +49,7 @@
       <p>维护任务在进程退出后，需要保留已完成的工具步骤，并交付可检查的补丁。本项目把持久化检查点、隔离工作区和显式测试连接起来，在真实开源仓库验证恢复行为。</p>
       <dl class="project-details"><div><dt>实际问题</dt><dd>任务中断、重复启动或测试失败后，如何继续并保留证据？</dd></div><div><dt>已验证</dt><dd>最新完整回归 74 项通过、无跳过；模型请求额度跨重启与修复轮次共享，真实进程中断后保留预算与工具进度。</dd></div><div><dt>维护对象</dt><dd>Deep Agents 与 OpenHands SDK 两个真实仓库。各自的正常与三处中断恢复均通过；<a href="notes/openhands-undo.html#maintenance">第二任务的独立验收</a>保留原版失败。</dd></div><div><dt>下一阶段</dt><dd>已加入原版回归与语法导出保护；继续评测模型维护质量。</dd></div></dl>
       <div class="chips"><span>Python</span><span>Deep Agents</span><span>SQLite checkpoints</span><span>Git worktree</span></div>
-      <div class="publication-links"><a class="text-link" href="notes/recovery.html">恢复与修复实验</a><a class="text-link" href="https://github.com/1137423918/AgentReliabilityLab" target="_blank" rel="noreferrer">源码仓库</a></div>
+      <div class="publication-links"><a class="text-link" href="project-brief.html">项目介绍与 PDF</a><a class="text-link" href="notes/recovery.html">恢复与修复实验</a><a class="text-link" href="https://github.com/1137423918/AgentReliabilityLab" target="_blank" rel="noreferrer">源码仓库</a></div>
     </div>
     <div class="project-panel"><div class="panel-label">THE MAINTENANCE WORKFLOW</div><div class="pipeline"><div><span>输入</span><strong>固定维护任务</strong><small>commit · 文件范围 · 测试命令</small></div><div><span>执行</span><strong>持久化检查点</strong><small>SQLite · 工具结果 · 恢复</small></div><div><span>检查</span><strong>隔离验收与修复</strong><small>固定验收 · 有界轮次 · 证据</small></div><div><span>归档</span><strong>补丁交付审阅</strong><small>diff · 返回码 · 日志哈希</small></div></div></div>
   </article>

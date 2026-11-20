@@ -79,9 +79,9 @@
     "model_mode": "scripted",
     "scope": "real repository and verification; scripted model; process-boundary faults only",
     "project_tests": {
-      "total": 18,
-      "passed": 18,
-      "worker_tests": 10,
+      "total": 21,
+      "passed": 21,
+      "worker_tests": 13,
       "evidence_tests": 8
     },
     "base_commit": "744a797e3b9495539ca35571eeffd112a205f5c8",
@@ -129,9 +129,20 @@
     "notes": "notes/recovery.html",
     "limitations": [
       "scripted fixed plan, not autonomous model evaluation",
-      "phase-boundary SIGKILL only, not power loss or parent-only kill during verification",
+      "Supervisor SIGKILL, host power loss and descendants escaping the command process group not covered",
       "trusted operator verification commands, not a hostile-code sandbox",
       "graph step budget, not token or cost budget"
-    ]
+    ],
+    "verification_supervision": {
+      "status": "verified",
+      "report": "reports/verification-supervision/report.json",
+      "baseline_new_regression": "failed",
+      "candidate_project_tests_passed": 21,
+      "real_repository_scenarios": 2,
+      "upstream_tests_per_scenario": 119,
+      "worker_only_sigkill": true,
+      "old_verifier_stopped_before_lock_release": true,
+      "same_patch": true
+    }
   }
 }

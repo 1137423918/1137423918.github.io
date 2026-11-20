@@ -35,6 +35,18 @@
       "status": "candidate_branch",
       "url": "https://github.com/1137423918/deepagents/tree/1137423918/sdk/normalize-backslash-paths",
       "upstream_pr": null
+    },
+    {
+      "project": "OpenHands/software-agent-sdk",
+      "status": "draft_pr",
+      "url": "https://github.com/OpenHands/software-agent-sdk/pull/7032",
+      "upstream_pr": 7032,
+      "merged": false,
+      "base_commit": "722e5d403cf75d4e032b79296cfaf178f8678a93",
+      "candidate_commit": "79f85dc34152a7234878bcc658ffdb6e4c31d6f4",
+      "report": "reports/openhands-undo/report.json",
+      "related_candidate_tests_passed": 185,
+      "model_inference": false
     }
   ],
   "package_regression": {

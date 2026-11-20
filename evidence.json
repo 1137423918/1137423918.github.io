@@ -100,11 +100,12 @@
     "model_mode": "scripted",
     "scope": "real repository and verification; scripted model; process-boundary faults only",
     "project_tests": {
-      "total": 26,
-      "passed": 26,
-      "worker_tests": 13,
+      "total": 33,
+      "passed": 33,
+      "worker_tests": 15,
       "evidence_tests": 8,
-      "transport_and_pilot_fixture_tests": 5
+      "transport_and_pilot_fixture_tests": 10,
+      "report": "reports/repair-loop/logs/repair-full-tests.log"
     },
     "base_commit": "744a797e3b9495539ca35571eeffd112a205f5c8",
     "task_sha256": "1f8426173527e962ee58b64d64929a7011d7cfbf1498617d73bb5ceb2c079aad",
@@ -185,5 +186,14 @@
       "model_inference": false,
       "report": "reports/openhands-maintenance/report.json"
     }
-  ]
+  ],
+  "repair_loop": {
+    "status": "verified_scripted_workflow",
+    "model_inference": false,
+    "report": "reports/repair-loop/report.json",
+    "extra_attempts_in_reference": 1,
+    "feedback_boundary_sigkill": "verified",
+    "same_final_patch": true,
+    "neural_model_metrics": null
+  }
 }

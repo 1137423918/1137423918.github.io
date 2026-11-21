@@ -408,11 +408,11 @@
     ]
   },
   "current_project_tests": {
-    "total": 100,
-    "passed": 100,
+    "total": 106,
+    "passed": 106,
     "skipped": 0,
-    "environment_change": "Same dedicated dependencies with explicit node-local ext4 test state. Ten latest storage checks included; previous checks not added again.",
-    "report": "reports/local-state/logs/full.log"
+    "environment_change": "Same dedicated dependencies, local ext4 test state; six inventory checks included, setup failures preserved.",
+    "report": "reports/file-inventory/final/full.log"
   },
   "source_navigation": {
     "status": "verified_reference_controls",
@@ -634,5 +634,43 @@
     "acceptance_run": false,
     "new_test_results": false,
     "service_stopped": true
+  },
+  "file_inventory": {
+    "status": "engineering_verified_neural_still_no_edit",
+    "article": "notes/file-inventory.html",
+    "report": "reports/file-inventory/report.json",
+    "feature": "file_inventory_v1",
+    "excluded_tools": [
+      "ls"
+    ],
+    "glob_retained": true,
+    "max_catalog_utf8_json_bytes": 8192,
+    "fake_model_checks_included": 6,
+    "full_suite": 106,
+    "default_alias_isolation_verified": true,
+    "neural_capability_claim": false
+  },
+  "inventory_cpu": {
+    "status": "request_budget_exhausted",
+    "article": "notes/file-inventory.html#trial",
+    "report": "reports/inventory-cpu/report.json",
+    "protocol": "reports/inventory-cpu/protocol.json",
+    "real_model": true,
+    "model": "Qwen3-4B-Instruct-2507 Q4_K_M",
+    "active_state_filesystem": "ext4",
+    "verified_trials": 0,
+    "model_turns": 8,
+    "tool_results": 8,
+    "ls_calls": 0,
+    "structured_tool_errors": 1,
+    "sdk_tool_status_errors": 0,
+    "virtual_changes": 0,
+    "exported_patch": false,
+    "acceptance_run": false,
+    "duration_seconds": 1525.938,
+    "request_body_bytes": 205121,
+    "next_request_sent": false,
+    "service_stopped": true,
+    "new_project_test_score_from_neural_trial": false
   }
 }

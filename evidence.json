@@ -522,24 +522,27 @@
   "portfolio_brief": {
     "page": "project-brief.html",
     "pdf": "downloads/junzhe-wang-project-brief.pdf",
-    "pdf_sha256": "c83de54199d1efb4ff113716d1d41a3c1c50f16f3538094d3d6244e8a5de36be",
+    "pdf_sha256": "31e50c8c3a3ee8ede4cb9fdc8e1f9e28ebb05a1a5aff09bf787d1b08c99705a5",
     "languages": [
       "zh",
       "en"
     ],
     "pdf_pages": 2,
-    "checked_at": "2026-11-21T09:52:26+08:00",
-    "source_files": 14,
+    "checked_at": "2026-11-21T16:03:57+08:00",
+    "source_files": 21,
     "pr_snapshot_count": 3,
     "new_test_results": false,
     "new_model_trials": false,
     "pdf_visual_reviewed": true,
     "website_browser_verified": false,
     "reference_repositories": 3,
-    "source_project_commit": "23e4346fa892a36f86884923757bfa3b4e4af9ea",
-    "current_worker_test_snapshot": 100,
+    "source_project_commit": "adf8d4eb3a95a1d201ae59a73a3566d92bea734f",
+    "current_worker_test_snapshot": 108,
     "current_supported_recovery_filesystem": "ext4",
-    "historical_nfs_controls_qualified": true
+    "historical_nfs_controls_qualified": true,
+    "lifecycle_case": "notes/recovery.html#verification-tree",
+    "latest_model_cpu_case": "notes/file-inventory.html#trial-9b",
+    "old_pdf_retained_in_git_commit": "adf8d4eb3a95a1d201ae59a73a3566d92bea734f"
   },
   "native_template": {
     "status": "verified_for_14_fixed_requests",

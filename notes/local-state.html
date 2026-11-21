@@ -1,0 +1,19 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>本机状态与共享归档 · Junzhe Wang</title><meta name="description" content="拒绝NFS活动检查点，在本机ext4验证进程恢复与只读备份审计。"><link rel="stylesheet" href="../style.css"><style>.essay{max-width:850px;font-size:1rem}.essay h1{font-size:2.7rem}.essay h2{font-size:1.5rem;margin:38px 0 16px}.essay p,.essay li{color:#53655a}.essay code{overflow-wrap:anywhere}.essay pre{padding:20px;background:#162b20;color:#dbefdf;overflow:auto;line-height:1.8}.table-scroll{overflow-x:auto}.essay table{width:100%;border-collapse:collapse;font-size:1rem}.essay th,.essay td{text-align:left;padding:12px 10px;border-bottom:1px solid #dce3dd}.essay .scope{border-left:3px solid #528b60;padding:16px 22px;background:#edf2ee}.essay a{color:#275f3c}@media(max-width:680px){.essay h1{font-size:2rem}.essay td,.essay th{padding:10px 6px}}</style></head><body><header class="header wrap"><a class="brand" href="../index.html"><span class="monogram">JW</span><span>JUNZHE WANG<span class="brand-sub">ENGINEERING & RESEARCH</span></span></a><a class="text-link" href="../index.html#lab">回到实验室</a></header><main class="wrap section essay"><p class="eyebrow">LOCAL STATE / RECOVERY / 2026.11.21</p>
+<h1>检查点留在本机，<br>归档另行保存。</h1>
+<p>实际核对发现，旧实验把SQLite WAL检查点放在nfs4上。SQLite明确不支持网络文件系统上的WAL；之前过程强杀虽留下了观察，不能因此称这种部署受支持。这一轮修正写入口，并在本机ext4重新验证一个真实维护任务。</p>
+<p class="scope">本轮没有神经推理或GPU调用。真实仓库使用既有参考编辑计划，验证存储准入、进程恢复和审计备份；不新增模型修复成绩，不追溯改写旧NFS实验。</p>
+<h2>创建、恢复和修复轮次共用检查</h2>
+<p>worker和repair在建目录前核对最近存在的目录，创建后及拿到排他锁后再次检查。已有SQLite主文件/WAL/SHM、锁、manifest、状态/结果/验收与请求额度文件必须是普通文件，分别核对其所在文件系统；拒绝控制文件链接。修复子轮次不再绕过准入提前建目录。</p>
+<p>Linux使用findmnt明确的FSTYPE输出，macOS查询原生磁盘元数据；未知类型或工具识别失败就停止。允许名单是必要条件，不是硬件耐久认证。tmpfs易失；overlay、FUSE、网络类型和其他未知类型不自动视为本机支持。</p>
+<div class="table-scroll"><table><thead><tr><th>内容</th><th>放置方式</th><th>本轮验证</th></tr></thead><tbody><tr><td>代码、依赖、普通日志</td><td>可使用原共享位置</td><td>与活动检查点分开</td></tr><tr><td>活动检查点、锁、额度</td><td>已识别的本机文件系统</td><td>Linux ext4</td></tr><tr><td>关闭任务的审计快照</td><td>本机生成独立快照，再私人归档</td><td>没有公开数据库或移动可执行worktree</td></tr></tbody></table></div>
+<h2>真实路径上的拒绝与恢复</h2>
+<p>实际nfs4新任务返回2，运行目录未创建；旧NFS完成任务同样在启动层拒绝，控制文件字节与mtime保持。没有通过返回旧缓存成功而绕过新规则，也没有初始化检查点或预留模型额度。</p>
+<p>固定Deep Agents 744a797e，在ext4上执行正常和首读checkpoint后真实SIGKILL两场：各完成四次工具操作，生成相同1573字节参考补丁。每场复用113条固定原版、119条候选及28个路径契约，存在重叠，不累加成新覆盖。全控制组约172.879秒，不是速度比较。</p>
+<h2>备份用于审计，不冒充任务迁移</h2>
+<p>源worker结束后，持有原worker排他锁，使用SQLite backup API在本机生成独立DELETE-journal快照，再关闭并私人归档。源数据库及原WAL帧保持，快照完整性检查通过，重建的只读审计JSON一致。数据库包含完整轨迹，私人ZIP不在本站或公共仓库中；没有从快照恢复执行，也没有搬迁Git worktree或证明跨主机恢复。</p>
+<h2>验证范围</h2>
+<p>服务器完整100项通过、零跳过，其中十项新增存储检查已包含在内。wheel中guard相关模块字节吻合，实际加载wheel入口同样拒绝NFS且未创建目录。Linux ext4有真实运行证据；macOS只有APFS元数据观察和适配器fixture检查，没有完整平台矩阵。</p>
+<p class="scope">这轮只复核Deep Agents的本机正常/首checkpoint场景；其他仓库和历史故障点保持原条件记录。准入不抵御特权重挂载或恶意路径替换，不证明磁盘硬件耐久、主机断电恢复或多主机执行。临时本机目录用于验证，长期任务还需管理其保留和归档。</p>
+<p><a href="../reports/local-state/README.md">日志、拒绝记录与备份证据</a> · <a href="../reports/local-state/summary.json">范围摘要</a> · <a href="../reports/local-state/report.json">两场实际结果</a> · <a href="https://github.com/1137423918/AgentReliabilityLab/blob/main/docs/local-state.md">操作和复现</a></p>
+<p>来源：<a href="https://sqlite.org/wal.html">SQLite WAL限制</a>、<a href="https://man7.org/linux/man-pages/man8/findmnt.8.html">findmnt目标与输出契约</a>、<a href="https://www.sqlite.org/backup.html">SQLite backup API</a>。本项目数字来自自己的固定版本实验。</p>
+</main><footer class="wrap footer"><span>© 2026 Junzhe Wang</span><a href="../index.html">返回个人主页</a></footer></body></html>

@@ -408,11 +408,11 @@
     ]
   },
   "current_project_tests": {
-    "total": 90,
-    "passed": 90,
+    "total": 100,
+    "passed": 100,
     "skipped": 0,
-    "environment_change": "Same dedicated dependencies; includes latest eight inspection checks and earlier read-index/budget/parser checks. No summed overlapping groups.",
-    "report": "reports/inspection/logs/full.log"
+    "environment_change": "Same dedicated dependencies with explicit node-local ext4 test state. Ten latest storage checks included; previous checks not added again.",
+    "report": "reports/local-state/logs/full.log"
   },
   "source_navigation": {
     "status": "verified_reference_controls",
@@ -592,5 +592,21 @@
     "acceptance_revalidation": false,
     "sqlite_auxiliary_files_may_be_created": true,
     "legacy_state_storage_nfs4_supported": false
+  },
+  "local_state_admission": {
+    "article": "notes/local-state.html",
+    "report": "reports/local-state/report.json",
+    "summary": "reports/local-state/summary.json",
+    "model_inference": false,
+    "network_new_and_resume_rejected": true,
+    "old_state_unchanged": true,
+    "actual_active_filesystem": "ext4",
+    "reference_cases": 2,
+    "actual_checkpoint_sigkill": true,
+    "same_patch": true,
+    "backup_audit_identical": true,
+    "full_database_published": false,
+    "executable_run_relocation_claim": false,
+    "legacy_nfs_records_unchanged": true
   }
 }

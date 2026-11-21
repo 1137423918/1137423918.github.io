@@ -672,5 +672,58 @@
     "next_request_sent": false,
     "service_stopped": true,
     "new_project_test_score_from_neural_trial": false
+  },
+  "adk_9b_cpu": {
+    "status": "request_budget_exhausted",
+    "article": "notes/file-inventory.html#trial-9b",
+    "report": "reports/adk-9b-cpu/report.json",
+    "protocol": "reports/adk-9b-cpu/protocol.json",
+    "real_model": true,
+    "model": "LMStudio-community Qwen3.5-9B Q4_K_M",
+    "verified_trials": 0,
+    "model_turns": 8,
+    "tool_results": 8,
+    "read_line_ranges": [
+      [
+        1,
+        100
+      ],
+      [
+        101,
+        200
+      ],
+      [
+        201,
+        300
+      ],
+      [
+        301,
+        400
+      ],
+      [
+        401,
+        500
+      ],
+      [
+        501,
+        600
+      ],
+      [
+        601,
+        700
+      ],
+      [
+        701,
+        800
+      ]
+    ],
+    "duration_seconds": 1721.383,
+    "request_body_bytes": 201769,
+    "virtual_changes": 0,
+    "exported_patch": false,
+    "acceptance_run": false,
+    "gpu_used": false,
+    "service_stopped": true,
+    "core_tests_rerun": false
   }
 }

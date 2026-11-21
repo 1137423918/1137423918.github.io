@@ -725,5 +725,24 @@
     "gpu_used": false,
     "service_stopped": true,
     "core_tests_rerun": false
+  },
+  "cuda_preparation": {
+    "status": "compiled_gpu_runtime_unverified",
+    "article": "notes/cuda-preparation.html",
+    "report": "reports/cuda-build/report.json",
+    "source_commit": "4783b1145c7073bb809f4c282ff4853cbfe42954",
+    "source_archive_sha256": "9588476bd9a7d5e62e19f83fea9eeb04287b2ce458c03e8a6107bfe70bce770e",
+    "source_tree_files": 4496,
+    "source_unchanged": true,
+    "toolchain_packages": 41,
+    "cuda_architectures": [
+      "86"
+    ],
+    "build_succeeded": true,
+    "gpu_runtime_test": false,
+    "model_inference": false,
+    "core_tests_rerun": false,
+    "full_build_peak_memory_known": false,
+    "initial_tree_monitor_gap_seconds": 343.86
   }
 }

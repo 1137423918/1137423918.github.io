@@ -128,6 +128,27 @@
       "model_service_stopped": true,
       "first_request_matches_reference_body": true,
       "full_trial_token_accounting_available": false
+    },
+    "indexed_read_cpu_maintenance": {
+      "article": "notes/source-navigation.html#indexed-cpu",
+      "report": "reports/indexed-cpu/report.json",
+      "status": "case_wall_limit_no_edits",
+      "model_inference": true,
+      "gpu": false,
+      "model_turns": 4,
+      "tool_results": 5,
+      "annotated_read_results": 2,
+      "virtual_changes": 0,
+      "exported_patch": false,
+      "acceptance_run": false,
+      "requests_reserved": 5,
+      "request_body_bytes": 143169,
+      "completed_task": false,
+      "service_stopped": true,
+      "forced_native_cleanup": true,
+      "original_state_filesystem": "nfs4",
+      "supported_sqlite_wal_storage": false,
+      "full_trial_compute_accounting_available": false
     }
   },
   "contributions": [
@@ -387,11 +408,11 @@
     ]
   },
   "current_project_tests": {
-    "total": 82,
-    "passed": 82,
+    "total": 90,
+    "passed": 90,
     "skipped": 0,
-    "environment_change": "Reuses dedicated jsonschema-capable environment with new PYTHONPATH source; includes eight new read-index checks and earlier 11 budget checks. Earlier 14 skipped parser checks execute; groups are not added together.",
-    "report": "reports/read-index/logs/full.log"
+    "environment_change": "Same dedicated dependencies; includes latest eight inspection checks and earlier read-index/budget/parser checks. No summed overlapping groups.",
+    "report": "reports/inspection/logs/full.log"
   },
   "source_navigation": {
     "status": "verified_reference_controls",
@@ -539,7 +560,7 @@
     "matrix_wall_seconds": 470.3863330828026
   },
   "python_read_index": {
-    "status": "verified_reference_controls_neural_variant_unrun",
+    "status": "reference_controls_passed_neural_trial_case_limit_no_edit",
     "model_inference": false,
     "article": "notes/source-navigation.html#read-index",
     "report": "reports/read-index/report.json",
@@ -557,7 +578,19 @@
       1,
       1
     ],
-    "neural_variant_run": false,
+    "neural_variant_run": true,
     "token_latency_repair_gain_measured": false
+  },
+  "run_inspection": {
+    "article": "notes/recovery.html#inspection",
+    "report": "reports/inspection/report.json",
+    "model_inference": false,
+    "output_byte_limit": 8192,
+    "live_trial_inspected": true,
+    "historical_snapshots_inspected": 2,
+    "wheel_metadata_entrypoint_executed": true,
+    "acceptance_revalidation": false,
+    "sqlite_auxiliary_files_may_be_created": true,
+    "legacy_state_storage_nfs4_supported": false
   }
 }

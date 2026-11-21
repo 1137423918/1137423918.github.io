@@ -47,4 +47,10 @@ f5ac2b13753a106a3b8f45fb308acddc3cfba477b841c5dbbcbf0d083f39d406</pre>
 <p>这是明确参考计划的运行器验证，不是 ADK agent runner 适配器或神经模型自主修复。独立模型任务已准备、未运行。原有计时器允许 180 秒观察中断阶段，再给恢复 worker 600 秒，不能称严格的合并 600 秒上限；本次四场合计仍小于 600 秒。<a href="../reports/adk-maintenance/README.md">完整证据</a>保留负对照、真实强杀轨迹和固定测试哈希；<a href="https://github.com/1137423918/AgentReliabilityLab/blob/main/docs/adk-maintenance.md">复现与边界</a>说明全部口径。</p>
 <h2>源码与可检查的证据</h2>
 <ul><li><a href="https://github.com/1137423918/AgentReliabilityLab">项目源码</a></li><li><a href="https://github.com/1137423918/AgentReliabilityLab/blob/main/docs/durable-worker.md">运行方式与边界</a></li><li><a href="https://github.com/1137423918/AgentReliabilityLab/blob/main/tasks/deepagents-path-maintenance.json">固定维护任务定义</a></li><li><a href="../reports/recovery/report.json">四场景结果、版本与补丁哈希</a></li><li><a href="../reports/repair-loop/logs/repair-full-tests.log">首轮 33 条项目测试日志</a></li><li><a href="../reports/recovery/checkpoint/verification-1.log">检查点恢复后的 119 条上游测试日志</a></li><li><a href="../reports/recovery/checkpoint/patch.diff">恢复后的真实补丁</a></li><li><a href="path-normalization.html">前一阶段：路径问题与 380 条回归</a></li></ul>
-<p>公开记录已经替换私人绝对路径；原始日志哈希与公开副本哈希在报告中分别标注。检查点数据库与完整会话未公开。</p></main><footer class="wrap footer"><span>© 2026 Junzhe Wang</span><a href="../index.html">返回个人主页</a></footer></body></html>
+<p>公开记录已经替换私人绝对路径；原始日志哈希与公开副本哈希在报告中分别标注。检查点数据库与完整会话未公开。</p><h2 id="inspection">只读查看真实运行进度</h2>
+<p>直接读取某个SQLite checkpoint tuple曾遗漏增量消息。新增agent-lab-inspect通过同一图结构的get_state重建进度，只使用空脚本模型构造schema，不执行模型、文件工具、恢复、Git或验收。可在运行时查看，也可复查失败轨迹。</p>
+<p>输出最多8KiB UTF-8元数据：模型回复与工具结果数量、待执行节点、工具名计数、虚拟文件字节和SHA；不输出任务提示、参数或源码。checkpoint使用一个只读事务；工件状态是另一个瞬间的观察，不表示测试、补丁或验收重新核验。</p>
+<p>完整服务器90项通过、零跳过，包含八项本次检查。真实任务早期读到一份回复、两条工具结果和两个索引标记；wheel入口稍后读取到两份回复、三条结果。两个已有参考检查点的持久数据保持，均未重新推理或验收。这些数字不增加模型修复成绩。</p>
+<p class="scope">SQLite只读连接仍可能创建空WAL/SHM协调文件。核对发现旧状态目录是nfs4；SQLite WAL不支持网络文件系统，旧观察不能作为这种部署的可靠性保证。后续新任务须先落到本机受支持的状态存储，并补充启动预检。</p>
+<p><a href="../reports/inspection/README.md">完整日志、诊断与wheel证据</a> · <a href="../reports/inspection/report.json">机器报告</a> · <a href="https://github.com/1137423918/AgentReliabilityLab/blob/main/docs/run-inspection.md">命令与复现</a> · <a href="https://sqlite.org/wal.html#read_only_databases">SQLite官方WAL限制</a></p>
+</main><footer class="wrap footer"><span>© 2026 Junzhe Wang</span><a href="../index.html">返回个人主页</a></footer></body></html>

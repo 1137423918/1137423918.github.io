@@ -122,7 +122,7 @@
   ]
 }</pre></details>
 <p><a href="../reports/evidence-direct/report.json">后续逐题报告与限制</a> · <a href="../reports/evidence-direct/normal/cases.json">同一问题与评分条件</a> · <a href="../reports/evidence-direct/normal/full-core.log">本轮124项日志</a> · <a href="../reports/evidence-direct/controls/report.json">六场SDK控制</a> · <a href="../reports/evidence-direct/README.md">完整轨迹、请求账本与源码哈希</a></p>
-<p>本页下方保留首轮两步方式的600秒超时和四条原样回复。中英PDF已按2026-11-21 23:39核验快照更新，说明本节三题结构2/3与自由文字范围歧义；完整轨迹及历史失败仍在本页保留。</p></section><p class="scope"><strong>首轮两步方式：工程已验证，真实模型审计未完成。</strong>124项完整回归通过、零跳过（新增8项包含在内）；另两场真实SDK假回复控制通过。9B CPU首题在600秒上限超时，零已验收审计，剩余两题按协议未运行。</p>
+<p>本页下方保留首轮两步方式的600秒超时和四条原样回复。中英PDF已按2026-11-22 03:16核验快照更新，保留本节三题结构2/3与文字范围歧义，并单列后续外部MCP超时；原轨迹及历史失败不重评。</p></section><p class="scope"><strong>首轮两步方式：工程已验证，真实模型审计未完成。</strong>124项完整回归通过、零跳过（新增8项包含在内）；另两场真实SDK假回复控制通过。9B CPU首题在600秒上限超时，零已验收审计，剩余两题按协议未运行。</p>
 <h2>两个只读工具，一条证据链</h2><p><code>list_reports</code>返回可信目录中的报告ID、描述和建议字段；<code>read_report</code>按明确JSON pointer读取1–8字段。报告固定SHA、最多256KiB，回复最多8192字节；错误ID、逃逸路径、链接、无效pointer或超限读取拒绝。</p><p>最终结构化结果需要verdict、facts和citations。后处理核对JSON精确类型和值、报告SHA及实际成功读取的谱系，父对象读取可以支持其后代字段；不把“true”和116当作同一事实。解释文字本身没有自动语义验收，目录由操作者信任，也不是恶意owner的认证边界。</p>
 <h2>用当前工具，核对固定旧快照</h2><p>八份报告固定在公开commit <code>2c977ec8404c9ebfd159a7addb1d97b7500407ff</code>：当时完整116项、OpenHands相关203项与其中22项、GPU短请求失败、GPU维护未启动等。问题明确要求依据这一快照，不能把新124项结果倒填进去，也不代表实时GitHub。</p>
 <div class="table-scroll"><table><thead><tr><th>预声明问题</th><th>状态</th><th>实际观察</th></tr></thead><tbody><tr><td>“三项GPU检查全过，维护任务已接受补丁”</td><td>超时，未通过</td><td>3次工具调用、4次回复；第5次结构化调用未完成</td></tr><tr><td>“116+203是319项核心检查，再加22项”</td><td>未运行</td><td>按首次超时即停止的原协议退出</td></tr><tr><td>正确描述旧116项及独立SDK控制</td><td>未运行</td><td>未扩大额度、未重启模型</td></tr></tbody></table></div>

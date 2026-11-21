@@ -537,21 +537,21 @@
   "portfolio_brief": {
     "page": "project-brief.html",
     "pdf": "downloads/junzhe-wang-project-brief.pdf",
-    "pdf_sha256": "2190219ab5eca2179998de28b87f83426f03dda34951ec815ef1f8bdbec73abf",
+    "pdf_sha256": "f5d2a61b383a8d683b7d51fa5329de3e687506bad01cd3591a60c8306e5b4981",
     "languages": [
       "zh",
       "en"
     ],
     "pdf_pages": 2,
-    "checked_at": "2026-11-21T23:39:02+08:00",
-    "source_files": 27,
+    "checked_at": "2026-11-22T03:16:06+08:00",
+    "source_files": 33,
     "pr_snapshot_count": 3,
     "new_test_results": false,
     "new_model_trials": false,
     "pdf_visual_reviewed": true,
     "website_browser_verified": false,
     "reference_repositories": 3,
-    "source_project_commit": "cb67290a9ced302834f8458adf94b78bc64246bd",
+    "source_project_commit": "d6b1aeed20144ed173c35f78544ac7583e25ebb9",
     "current_worker_test_snapshot": 130,
     "current_supported_recovery_filesystem": "ext4",
     "historical_nfs_controls_qualified": true,
@@ -564,9 +564,19 @@
     "later_mcp_service_case": "notes/mcp-evidence.html",
     "included_mcp_service_case": "notes/mcp-evidence.html",
     "included_known_query_submit_tool_case": "notes/evidence-audit.html#submit-tool",
-    "optional_cross_sdk_consumer_not_in_PDF": true,
     "later_optional_cross_sdk_case": "notes/mcp-agent.html",
-    "later_fifth_PR_case": "notes/cancelled-send.html"
+    "later_fifth_PR_case": "notes/cancelled-send.html",
+    "upstream_open": 5,
+    "upstream_draft": 4,
+    "upstream_merged": 0,
+    "upstream_human_approval_verified": false,
+    "included_external_mcp_consumer_case": "notes/mcp-agent.html",
+    "included_mcp_cleanup_case": "notes/mcp-agent.html#cleanup",
+    "included_installable_mcp_service_case": "notes/mcp-evidence.html#installable",
+    "prior_PDF": {
+      "sha256": "2190219ab5eca2179998de28b87f83426f03dda34951ec815ef1f8bdbec73abf",
+      "retained_in_Git": "bd665463617748372312e61c92c7140a9afaa8d4:portfolio/junzhe-wang-project-brief.pdf"
+    }
   },
   "native_template": {
     "status": "verified_for_14_fixed_requests",
@@ -3429,5 +3439,49 @@
       "https://py.sdk.modelcontextprotocol.io/"
     ]
   },
-  "latest_full_core_report": "reports/evidence-package/report.json"
+  "latest_full_core_report": "reports/evidence-package/report.json",
+  "portfolio_refresh": {
+    "checked_at": "2026-11-22T03:16:06+08:00",
+    "purpose": "Substantive bilingual project brief refresh for the usable MCP artifact and five verified upstream PRs; no new neural or runtime results.",
+    "project_evidence_base_commit": "d6b1aeed20144ed173c35f78544ac7583e25ebb9",
+    "all33_evidence_files_match_exact_Git_blobs": true,
+    "source_files": 33,
+    "PDF_sha256": "f5d2a61b383a8d683b7d51fa5329de3e687506bad01cd3591a60c8306e5b4981",
+    "PDF_bytes": 211038,
+    "prior_PDF_sha256": "2190219ab5eca2179998de28b87f83426f03dda34951ec815ef1f8bdbec73abf",
+    "prior_PDF_retained_in_Git": "bd665463617748372312e61c92c7140a9afaa8d4:portfolio/junzhe-wang-project-brief.pdf",
+    "pages": 2,
+    "page_size": "A4",
+    "selected_phrases_per_page": 13,
+    "URI_targets_per_page": 12,
+    "linked_upstream_PRs": 5,
+    "open": 5,
+    "drafts": 4,
+    "merged": 0,
+    "status_labels_derived_from_snapshot": true,
+    "review_semantics": "One Copilot Bot COMMENTED review, not human approval; no human approval verified.",
+    "starter_link_in_both_languages": true,
+    "latest_core_snapshot": 130,
+    "installed_controls": 8,
+    "MCP_consumer_controls": 10,
+    "consumer_controls_include_prior_four": true,
+    "overlapping_scopes_added": false,
+    "old_local_audit_structured_known_queries": "2/3, prose ambiguity retained",
+    "external_MCP_model_audit": "first query600s timeout, no submission; second not run",
+    "paper_and_Bib_unchanged": true,
+    "no_education_or_employment_invented": true,
+    "build_receipt_sha256": "b1c308edb73ff347a3124519ee6b02c149f0dc7abfcbc7caf7852de53c8f5b1f",
+    "qa_sha256": "a65c5f2b3e90b23ed42ba4425fd19248ed5e161e4305d55ed0e883c52e7c4e1d",
+    "latest_rendered_PNG_SHA256": [
+      "2ca25b9314827868cef3a81382f0ae67302d97ac73139a2b0cf72edb00febc96",
+      "9c569ae03c47aae7ce50e93515437b5a3400bd5855dd7e6458cfe1343e449a98"
+    ],
+    "visual_PDF_QA": true,
+    "browser_interaction_QA": false,
+    "brief_JS_and_CSS_unchanged": true,
+    "new_runtime_experiments": false,
+    "new_server_tests": false,
+    "new_model_requests": false,
+    "GitHub_actions": "PR metadata/reviews read only; no issues/comments/ready/review requests/merge/attestations"
+  }
 }

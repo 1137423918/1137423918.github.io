@@ -21,7 +21,7 @@
 <p>两次拉取外部钩子仓库的网络失败、首次 Ruff 格式修改和相关检查引用旧文件名的收集失败均保留。最终使用官方 tag 提交一致、源码未改的旧任务缓存执行相同钩子，修正当前测试路径后通过；没有削弱断言。原始/公开日志哈希、运行前协议和源码快照均可下载。</p>
 <p class="scope"><a href="https://github.com/OpenHands/software-agent-sdk/pull/7050">草稿 PR #7050</a> 已提交、未合并。测试 CI 当前为 action_required，等待维护者放行；服务器测试通过不代表上游 CI 全绿。人工专用说明栏保留原占位，尚未请求正式评审。这一修复只处理解析后相同的移动路径，不提供通用事务回滚、文件系统竞态隔离或跨平台运行证明。</p>
 <ul><li><a href="../reports/apply-move/report.json">机器可读结果</a> · <a href="../reports/apply-move/baseline-live.json">原版真实入口观察</a> · <a href="../reports/apply-move/candidate-live.json">候选相同工作流</a></li><li><a href="../reports/apply-move/baseline-regression.log">原版新增检查失败</a> · <a href="../reports/apply-move/candidate-related-corrected.log">203 项相关检查日志</a> · <a href="../reports/apply-move/upstream-status.json">PR 与 CI 快照</a></li><li><a href="../reports/apply-move/README.md">复现、环境与保留失败</a> · <a href="../reports/apply-move/artifacts.json">工件哈希</a> · <a href="https://github.com/1137423918/AgentReliabilityLab/blob/main/benchmarks/openhands_apply_move.py">四场公开入口复现程序</a></li></ul>
-<p>中英项目 PDF 保留为本日较早的 17:21 核验快照，涵盖此前三份草稿；本次第四份 PR 及最新状态以本节和上述快照为准。</p></section>
+<p>中英项目 PDF 已于本日20:33状态核验后更新，列出四份未合并草稿及各自链接；本节保留该修复的原始验证与CI状态快照。</p></section>
 <section id="maintenance" class="wrap section essay"><p class="eyebrow">FROM BUG TO MAINTENANCE TASK</p><h2>把缺陷变成独立验收任务</h2>
 <p>这次修复也成为运行器的第二个真实维护对象。运行器仍使用 Deep Agents / LangGraph，目标代码库是 OpenHands SDK；验收调用其公共文件编辑器，并不表示接入了 OpenHands Agent 运行时。</p>
 <p>模型只能修改两份生产文件，操作者验收固定在任务定义中。验收先运行基线原有的 184 条测试，再做真实只读目录检查。每条命令核对导入路径，确保测试当前隔离工作区，而不是环境中已有的修复版。原版通过 184 条旧测试却无法通过权限检查，参考修复两者均通过。</p>

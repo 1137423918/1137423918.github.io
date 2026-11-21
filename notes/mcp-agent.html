@@ -10,6 +10,21 @@
 <p>原始模型账本为<strong>6次预留、5份完整HTTP200回复、1次未知</strong>，累计47,710请求正文字节。已收到五份回复的usage为10,616输入token（其中7,681缓存）及399输出token；不包含未知回复、原生warmup或未完成工作。模型与采样、8K上下文、四核CPU、每题8次/单体65,536/总量262,144字节额度均预先固定，没有延长600秒或重跑。</p>
 <h2>传输额度与清理需要分开看</h2><p>模型POST持久账本与MCP每次审计16次操作、八次读取、600秒TTL互不替代。最终记录37次MCP请求及37份完整回复，控制与真实模型合计103份双通道请求/回复正文通过SHA、长度、JSON与隐私核对。MCP的HTTP200也可以携带业务拒绝，不能当作37次业务成功。</p>
 <p>四个控制上下文正常关闭。真实审计在清理时已过期，<code>audit_status</code>返回“Unknown or expired audit capability”，该序列没有再发<code>close_audit</code>，不能声称收到了关闭确认。最终原生模型退出0，MCP按计划SIGTERM(-15)退出；两个端口关闭，未观察到任务遗留进程，模型密钥文件已删除，测试能力随进程退出失效。</p>
+<h2 id="cleanup">状态失败，也应尝试关闭同一个审计</h2>
+<p>后续修复在不重跑真实模型的情况下，补齐一个实际生命周期缺陷：旧适配器先查状态，再在同一个try块里关闭；查询报错就会跳过关闭。新版在工作流传输退出后，使用新连接关闭<strong>原有审计</strong>。清理最多10秒，其中可选状态查询最多2秒；只有一次关闭尝试，没有新审计、TTL续期、业务重放或模型重试。</p>
+<div class="table-scroll"><table><thead><tr><th>真实SDK/TCP控制</th><th>旧版</th><th>候选</th></tr></thead><tbody>
+<tr><td>原四场正常/拒绝接纳控制</td><td>通过</td><td>继续通过</td></tr>
+<tr><td>状态回复缺少MCP2必需字段</td><td>SDK验证错误，未发关闭</td><td>记录畸形回复，仍正常关闭</td></tr>
+<tr><td>合法MCP2工具错误</td><td>MCPToolFailure，未发关闭</td><td>记录状态错误，仍正常关闭</td></tr>
+<tr><td>状态查询延迟3秒</td><td>等待后本已关闭</td><td>2秒状态上限后仍关闭</td></tr>
+<tr><td>模型请求超时 / 外部取消</td><td>本已关闭，取消继续传播</td><td>保持通过；未知请求仍扣额</td></tr>
+<tr><td>测试专用1秒TTL已过期</td><td>状态失败，未发关闭；能力已失效</td><td>关闭尝试被拒，仍记失败</td></tr>
+</tbody></table></div>
+<p><strong>10个不同候选控制通过，包含此前四场，不与130项核心快照相加。</strong>首九场基线6过/3失败、候选9过；这三处断言失败不等于三处资源泄漏，延迟查询原本最终关闭、过期上下文也已失效。首轮名为<code>status_error</code>的注入缺少<code>resultType</code>，实际是畸形响应，该源码和结果原样保留。之后只补一场带<code>resultType=complete</code>的合法工具错误，基线0过/1失败、相同候选适配器1过，前九场没有重跑。</p>
+<p>每侧共21次脚本模型POST，零神经/GPU调用；两个中断请求均保持未知扣额。候选每场只创建一个审计，发一次关闭；正常关闭的上下文经独立状态查询已不可再用，已过期场景没有关闭确认。四个执行配置均终止、所有测试服务任务结束、自有进程归零；45份冻结来源及锁定SDK版本在执行后不变。工作流模型额度、事实接纳判定、回执边界与600秒能力TTL不改。</p>
+<p>不可达服务、再次取消、初始化失败或能力过期仍可能没有关闭确认。此修复不让上方真实9B超时记录变成成功，也不恢复整个工作流、保证工具恰好一次或提供公网多用户认证。关于取消与超时的语义参照<a href="https://docs.python.org/3.11/library/asyncio-task.html#timeouts">Python官方文档</a>；MCP2 SDK入口见<a href="https://github.com/modelcontextprotocol/python-sdk/blob/main/README.md">上游说明</a>。</p>
+<ul><li><a href="../reports/mcp-cleanup/report.json">新测量、十场范围与局限</a> · <a href="../reports/mcp-cleanup/verification.json">353份已保存正文独立核对</a> · <a href="../reports/mcp-cleanup/adapter.patch">精确适配器补丁</a> · <a href="../reports/mcp-cleanup/artifacts.json">291份工件原始/公开哈希</a></li>
+<li><a href="../reports/mcp-cleanup/baseline/controls/report.json">原九场基线</a> · <a href="../reports/mcp-cleanup/candidate-v1/controls/report.json">候选九场</a> · <a href="../reports/mcp-cleanup/baseline-tool-error-v2/controls/report.json">单独合法工具错误基线</a> · <a href="../reports/mcp-cleanup/candidate-tool-error-v2/controls/report.json">单独候选</a></li></ul>
 <h2>保留准备与集成失败</h2><p>最初SDK导入触及180秒上限；独立120秒诊断的五次堆栈在NFS模块或元数据读取处。顺序复制又触及900秒准备上限，部分目录保留。随后用八个I/O线程、四核CPU，在约93.4秒复制并逐哈希核对8,999个相同文件与依赖版本；后续导入分别9.58秒及6.72秒。缓存影响没有隔离，这不是因果性能对比。</p>
 <p>第一轮实际控制中，正常提交已通过，伪造事实也被后端拒绝，但MCP的异步上下文把应用层EvidenceError包装为ExceptionGroup，原检查断言失败。修复只把相同的最终接纳判定移到传输上下文退出后，四个控制断言、gold、后端与额度不改；两轮失败及旧适配器源码都公开保留。此前共享33份核心/测试/评分/服务源码未改，完整130项是已验证快照，本轮没有新增或重跑该计数。</p>
 <ul><li><a href="../reports/mcp-agent/report.json">实际结果与全部边界</a> · <a href="../reports/mcp-agent/verification.json">独立轨迹核对</a> · <a href="../reports/mcp-agent/manual-review.json">字面轨迹解释</a></li><li><a href="../reports/mcp-agent/controls/report.json">四场控制</a> · <a href="../reports/mcp-agent/cases/inflated_merged_claim/result.json">全部实际模型/MCP字节与工具事件</a> · <a href="../reports/mcp-agent/cases/inflated_merged_claim/journal/model-requests.json">未知仍扣额的账本</a></li><li><a href="../reports/mcp-agent/normal/protocol.json">冻结协议</a> · <a href="../reports/mcp-agent/normal/cases.json">两题与外部评分</a> · <a href="../reports/mcp-agent/normal/run-report.json">资源与终态</a> · <a href="../reports/mcp-agent/artifacts.json">111份工件哈希</a></li><li><a href="../reports/mcp-agent/pre-model-v3/run-report.json">保留的控制失败</a> · <a href="../reports/mcp-agent/bootstrap/localize-v2-report.json">依赖副本核对</a> · <a href="https://github.com/1137423918/AgentReliabilityLab/blob/main/docs/mcp-agent.md">安装、运行与边界</a></li></ul>

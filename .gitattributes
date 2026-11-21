@@ -5,3 +5,4 @@ reports/**/*.jsonl -whitespace
 reports/**/patch.diff -whitespace
 reports/sk-cancelled-send/**/*.xml -whitespace
 reports/sk-cancelled-send/**/tested-source/**/*.txt -whitespace
+reports/mcp-cleanup/adapter.patch -whitespace

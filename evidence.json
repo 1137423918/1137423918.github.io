@@ -744,5 +744,29 @@
     "core_tests_rerun": false,
     "full_build_peak_memory_known": false,
     "initial_tree_monitor_gap_seconds": 343.86
+  },
+  "gpu_transport": {
+    "status": "raw_text_contract_failed_tools_passed",
+    "article": "notes/cuda-preparation.html#gpu-smoke",
+    "report": "reports/gpu-smoke/report.json",
+    "http_requests": 3,
+    "http_statuses": [
+      200,
+      200,
+      200
+    ],
+    "semantic_checks_passed": [
+      false,
+      true,
+      true
+    ],
+    "overall_passed": false,
+    "offloaded_layers": 33,
+    "context_allocated": 32768,
+    "autonomous_tool_selection": false,
+    "repository_maintenance_run": false,
+    "new_neural_repair": false,
+    "core_tests_rerun": false,
+    "cleanup_confirmed": true
   }
 }

@@ -612,5 +612,27 @@
     "full_database_published": false,
     "executable_run_relocation_claim": false,
     "legacy_nfs_records_unchanged": true
+  },
+  "adk_focused_cpu": {
+    "status": "request_budget_exhausted_no_edit",
+    "article": "notes/adk-focused-cpu.html",
+    "report": "reports/adk-focused-cpu/report.json",
+    "protocol": "reports/adk-focused-cpu/protocol.json",
+    "real_model": true,
+    "model": "Qwen3-4B-Instruct-2507 Q4_K_M",
+    "active_state_filesystem": "ext4",
+    "planned_trials": 1,
+    "verified_trials": 0,
+    "model_turns": 8,
+    "tool_results": 8,
+    "requests_reserved": 8,
+    "request_body_bytes": 119155,
+    "next_request_sent": false,
+    "case_wall_seconds_observed": 913.965,
+    "virtual_changes": 0,
+    "exported_patch": false,
+    "acceptance_run": false,
+    "new_test_results": false,
+    "service_stopped": true
   }
 }

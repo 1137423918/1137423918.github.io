@@ -1,0 +1,17 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ADK 真实模型：额度耗尽但无编辑 · Junzhe Wang</title><meta name="description" content="真实4B模型定位到ADK删除实现，但八次请求后无编辑；预算与失败证据公开。"><link rel="stylesheet" href="../style.css"><style>.essay{max-width:850px;font-size:1rem}.essay h1{font-size:2.7rem}.essay h2{font-size:1.5rem;margin:38px 0 16px}.essay p,.essay li{color:#53655a}.essay code{overflow-wrap:anywhere}.essay pre{padding:20px;background:#162b20;color:#dbefdf;overflow:auto;line-height:1.8}.table-scroll{overflow-x:auto}.essay table{width:100%;border-collapse:collapse;font-size:1rem}.essay th,.essay td{text-align:left;padding:12px 10px;border-bottom:1px solid #dce3dd}.essay .scope{border-left:3px solid #528b60;padding:16px 22px;background:#edf2ee}.essay a{color:#275f3c}@media(max-width:680px){.essay h1{font-size:2rem}.essay td,.essay th{padding:10px 6px}}</style></head><body><header class="header wrap"><a class="brand" href="../index.html"><span class="monogram">JW</span><span>JUNZHE WANG<span class="brand-sub">ENGINEERING & RESEARCH</span></span></a><a class="text-link" href="../index.html#lab">回到实验室</a></header><main class="wrap section essay"><p class="eyebrow">REAL MODEL / GOOGLE ADK / 2026.11.21</p><h1>定位到了实现，<br>仍停在读取。</h1>
+<p>Google ADK 的产物并发删除可能遇到文件或版本目录先被另一个调用移除。本次让真实 Qwen3-4B Q4_K_M 根据症状处理既有公开问题：只允许修改一个生产文件，提供完整路径及现有源码工具的使用提示，没有提供修改方案。</p>
+<p class="scope">一次预先声明的正常轨迹，913.965秒，零通过验收的补丁。模型完成八次请求后，下一次在联网前被持久化额度守卫拒绝；没有编辑、补丁或验收执行。没有GPU、重试、修复轮次或故障注入。</p>
+<h2>实际执行了什么</h2><div class="table-scroll"><table><thead><tr><th>顺序</th><th>实际工具选择</th><th>结果</th></tr></thead><tbody>
+<tr><td>1–4</td><td>ls，逐级查询/src到artifacts</td><td>四个不同目录，均返回下一层路径</td></tr>
+<tr><td>5</td><td>inspect_python，模块定义清单</td><td>返回版本哈希和符号ID</td></tr>
+<tr><td>6</td><td>inspect_python，_delete_artifact_sync</td><td>已读取删除实现</td></tr>
+<tr><td>7–8</td><td>inspect_python，list_versions与类首屏</td><td>继续读取，没有调用编辑工具</td></tr>
+</tbody></table></div><p>这些目录查询是逐级遍历，不能写成同一路径的死循环。源码工具确实被使用，也读到了相关实现，但可用和已用都不等于完成维护。</p>
+<h2>触发的是请求次数上限</h2><p>八份JSON请求累计119155字节，最大22509字节，均低于累计262144/单份65536字节上限。八次响应均为HTTP200，原生日志记录八次生成；下一次请求在发送前被拒绝。没有达到1800秒整场上限，也没有在结果出现后增加额度。</p>
+<p>每请求600秒、服务2400秒、输出1536token、40步图执行，CPU四线程/nice19。活动检查点、worktree及临时目录放本机ext4，沿用64GiB可用内存准入、48GiB地址空间与36GiB RSS限制。服务退出0、无强制清理；端口关闭，原生子进程与本次worker/verifier均已结束。</p>
+<h2>验收与统计的边界</h2><p>原版ADK测试和四个外部契约保持原样，但本次没有候选进入验收，因此不新增1863项或任何测试成绩。既有100项项目回归也没有重复运行。之前的脚本恢复控制、NFS限制和真实模型失败记录分别保留。</p>
+<p>八份保存回复报告input29591、cache-read24026、output451；输入减缓存5565与八条已完成原生prefill之和一致。模型、任务、提示、采样与存储同时变化，不作能力、token、费用或延迟增益的因果比较。</p>
+<p>采用已校验的固定版本模型和官方原生后端。<a href="https://huggingface.co/Qwen/Qwen3-4B-Instruct-2507">官方模型卡</a>说明非思考模式并提供采样建议；本次输出上限1536属于资源限制，不等同于模型卡的较长输出评测设置。</p>
+<h2>下一项可验证假设</h2><p>已有完整文件清单的任务是否需要目录查询工具？后续可以预先定义任务级工具范围，再比较有效源码读取与编辑。但本次只证明这一轨迹用完请求而未修改文件，不能先宣称工具裁剪有效。</p>
+<p><a href="../reports/adk-focused-cpu/README.md">证据索引</a> · <a href="../reports/adk-focused-cpu/report.json">机器可读结果</a> · <a href="../reports/adk-focused-cpu/protocol.json">固定协议</a> · <a href="../reports/adk-focused-cpu/audit/report.json">实际工具顺序</a> · <a href="../reports/adk-focused-cpu/normal/resumed.stderr.log">停止原因</a></p>
+<p><a href="source-navigation.html#indexed-cpu">之前的9B读取试验</a> · <a href="local-state.html">本机状态策略</a> · <a href="../project-brief.html">项目介绍与PDF（带核验时间的快照）</a></p></main><footer class="wrap footer"><span>© 2026 Junzhe Wang</span><a href="../index.html">返回个人主页</a></footer></body></html>

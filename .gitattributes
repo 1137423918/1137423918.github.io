@@ -3,3 +3,5 @@ reports/*.patch -whitespace
 reports/**/*.log -whitespace
 reports/**/*.jsonl -whitespace
 reports/**/patch.diff -whitespace
+reports/sk-cancelled-send/**/*.xml -whitespace
+reports/sk-cancelled-send/**/tested-source/**/*.txt -whitespace

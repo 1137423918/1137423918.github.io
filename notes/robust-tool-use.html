@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>工具调用鲁棒性 · Junzhe Wang</title><meta name="description" content="Agent算法与应用研究：固定公开数据、核验评分口径，区分已完成准备、模型实验与应用能力。"><link rel="stylesheet" href="../style.css"><style>.essay{max-width:850px;font-size:1rem}.essay h1{font-size:2.7rem}.essay h2{font-size:1.5rem;margin:38px 0 16px}.essay p,.essay li{color:#53655a}.essay code{overflow-wrap:anywhere}.essay pre{padding:20px;background:#162b20;color:#dbefdf;overflow:auto;line-height:1.8}.table-scroll{overflow-x:auto}.essay table{width:100%;border-collapse:collapse;font-size:1rem}.essay th,.essay td{text-align:left;padding:12px 10px;border-bottom:1px solid #dce3dd}.essay .scope{border-left:3px solid #528b60;padding:16px 22px;background:#edf2ee}.essay a{color:#275f3c}@media(max-width:680px){.essay h1{font-size:2rem}.essay td,.essay th{padding:10px 6px}}</style><style>.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:28px 0}.flow span{padding:16px 10px;border:1px solid #cad7ce;border-radius:6px;text-align:center;background:#f5f8f5}@media(max-width:600px){.flow{grid-template-columns:repeat(2,1fr)}}</style></head><body><header class="header wrap"><a class="brand" href="../index.html"><span class="monogram">JW</span><span>JUNZHE WANG<span class="brand-sub">ENGINEERING &amp; RESEARCH</span></span></a><a class="text-link" href="../index.html#lab">回到实验室</a></header><main class="wrap section essay"><p class="eyebrow">MODEL RESEARCH × AGENT APPLICATIONS / 2026.11.23</p>
 <h1>工具调用鲁棒性，<br>从评测走向应用。</h1>
 <p>同时推进算法与模型研发、Agent应用开发。应用问题来自已有项目证据核对助手：工具调用可能漏参数、重复读取，或没有最终提交；研究目标是在等预算下改善这些行为，再验证能否迁移到独立实际任务。</p>
-<p class="scope"><strong>已完成数据与评分器CPU审计；模型基线与训练尚未开始。</strong>下文32个控制从参考答案构造，零神经调用；没有新模型准确率、训练提升或正式产品用户指标。</p>
+<p class="scope"><strong>已完成数据与评分器CPU审计；另已核验训练数据并生成配对研究输入；模型基线与训练尚未开始。</strong>下文32个控制从参考答案构造，零神经调用；没有新模型准确率、训练提升或正式产品用户指标。</p>
 <h2>先核对数据与评分在测什么</h2>
 <p>阅读<a href="https://arxiv.org/abs/2605.11928v3">AgentRobustBench论文v3</a>，固定<a href="https://github.com/WillChow66/AgentRobustBench/tree/111fd3db40491e0d7d8a5ec432b7ac1c6c64b2f1">官方源码111fd3db</a>。其ToolRL-DR研究扰动数据下的工具调用训练，是选题依据，不是本人的方法或复现成绩。</p>
 <div class="table-scroll"><table><thead><tr><th>范围</th><th>实际完成情况</th></tr></thead><tbody>
@@ -10,7 +10,12 @@
 <tr><td>评分器诊断</td><td>32个限定clean BFCL样本，原参考参数32通过；清空参数也32通过，同时缺声明必填键</td></tr>
 <tr><td>模型与训练</td><td>零模型调用、未训练；没有跑完3721题推理</td></tr></tbody></table></div>
 <p>官方BFCL兼容评分器源码明确允许省略参数。本次保持原规则，另外记录顶层必填键缺失；这只能说明匹配分数与工具输入要求存在不同口径，不能当作32个模型错误、推翻官方模型成绩，或冒充完整JSON Schema/真实执行验证。</p>
-<p>部分same_name变体的ID不能直接对应clean；ID重叠也不等于语义任务家族已核验。训练Parquet和训练/验证/评测隔离仍待审计，评测记录没有用于训练，也没有随机拆出新训练集。</p>
+<p>部分same_name变体的ID不能直接对应clean；ID重叠也不等于语义任务家族已核验。首轮尚未检查训练Parquet；后续发现和处理见下节。评测记录没有用于训练，也没有按记录随机拆出新训练集。</p>
+<h2 id="training-data">训练前发现验证样本复用，另建配对输入</h2>
+<p>在GPU7节点的CPU上实际读取发布的训练Parquet：Full3905行、Mixed4000行、训练期间验证79行。<strong>Mixed包含全部79个验证ID，其中4条完整prompt及gold逐字相同，63条完整输入历史相同。</strong>Full与验证在本次五种指纹下未发现相同项。这里的验证文件不是官方3721场景评测，不据此改判作者的最终评测成绩。</p>
+<p>独立冻结第二配置生成新的私有研究输入：Full和Mixed各3905个相同ID，Mixed排除79个验证ID和16个无Full对应ID，验证79行顺序/内容保持。完整prompt、prompt+gold、输入历史、规范化user序列四种交集均为零；真实写入重读Parquet保留逐行内容/schema，7889个选择记录又对照首次审计的7984个原行哈希核对。</p>
+<p>这是按发布元数据ID配对，尚非独立语义家族去重；也没有自动配平训练token、更新步数或计算量。验证仍来自原扰动分布，缺独立clean开发集；新输入尚未在训练器消费。零GPU/模型/训练调用，不能写成模型提升或完整GRPO复现。</p>
+<p><a href="../reports/training-data-audit/results/report.json">原输入与复用范围</a> · <a href="../reports/training-data-audit/results/overlap-details.jsonl">重叠行号与哈希</a> · <a href="../reports/training-data-audit/pairs/results/report.json">新配对输入结果</a> · <a href="../reports/training-data-audit/pairs/results/selection-manifest.jsonl">7889条选择记录</a> · <a href="../reports/training-data-audit/artifacts.json">27份工件双哈希</a> · <a href="https://github.com/1137423918/AgentReliabilityLab/blob/main/docs/training-data.md">复查命令与完整局限</a></p>
 <h2>算法线：比较数据训练与执行反馈</h2>
 <p>拟在同一3B底座上建立未训练基线，比较干净数据和扰动混合数据的参数高效微调；固定开发集、更新步数、有效训练token及生成预算，官方评测留作最终检验。再做原模型、仅参数检查、仅训练、训练加检查四组消融。检查反馈不填gold，测试轨迹不回流调参。</p>
 <p>保留官方分数，同时补充完整schema有效性、受控执行结果、clean/扰动分项、失败类型与实际用量，按任务家族处理相关性。上述是待冻结与执行的研究路线；尚未证明48GB单卡可复现完整GRPO训练，也不把现成checkpoint成绩记为本人训练成果。</p>

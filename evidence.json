@@ -2564,12 +2564,14 @@
     "report": "reports/sk-cancelled-send/report.json"
   },
   "upstream_current_status": {
-    "snapshot": "reports/sk-cancelled-send/upstream-snapshot.json",
+    "snapshot": "reports/upstream-current/upstream-snapshot.json",
+    "checked_at_utc": "2026-11-23T01:57:54.996916+00:00",
     "open": 5,
-    "draft": 4,
+    "draft": 1,
     "merged": 0,
-    "prior14845_externally_nondraft": true,
-    "human_approval_verified": false
+    "human_approval_verified": false,
+    "changes": "External non-draft states7032/8278/14853; ADK head merges main, two tested target files byte-identical but whole current head not rerun; Copilot COMMENTED on14845/14853 is not human approval.",
+    "actions": "Read only, no upstream writes/comments/issues/ready/review requests/merge/attestation."
   },
   "mcp_cleanup": {
     "checked_at_utc": "2026-11-21T18:29:57.920426+00:00",
@@ -3497,7 +3499,9 @@
     "neural_predictions": 0,
     "training_started": false,
     "training_eval_separation_verified": false,
-    "general_application_quality_verified": false
+    "general_application_quality_verified": false,
+    "training_Parquets_audited": true,
+    "paired_inputs_prepared": true
   },
   "mcp_agent_gpu_interrupt": {
     "report": "reports/mcp-agent-gpu/report.json",
@@ -3509,5 +3513,18 @@
     "complete_wire_bodies_saved": false,
     "cleanup_verified": true,
     "retry_performed": false
+  },
+  "training_data_audit": {
+    "report": "reports/training-data-audit/results/report.json",
+    "paired_inputs": "reports/training-data-audit/pairs/results/report.json",
+    "article": "notes/robust-tool-use.html#training-data",
+    "original_rows": 7984,
+    "Mixed_validation_IDs_reused": 79,
+    "Mixed_literal_prompt_gold_duplicates": 4,
+    "paired_training_IDs_each": 3905,
+    "validation_rows": 79,
+    "selected_rows_verified": 7889,
+    "new_training_run": false,
+    "semantic_dedup_verified": false
   }
 }

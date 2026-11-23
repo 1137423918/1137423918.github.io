@@ -3483,5 +3483,31 @@
     "new_server_tests": false,
     "new_model_requests": false,
     "GitHub_actions": "PR metadata/reviews read only; no issues/comments/ready/review requests/merge/attestations"
+  },
+  "research_and_application_focus": {
+    "user_confirmed": [
+      "algorithm_and_model_research",
+      "Agent_application_development"
+    ],
+    "article": "notes/robust-tool-use.html",
+    "static_audit_report": "reports/agentrobustbench-audit/results/report.json",
+    "static_records": 2718,
+    "single_turn_records": 2527,
+    "gold_derived_scorer_controls": 32,
+    "neural_predictions": 0,
+    "training_started": false,
+    "training_eval_separation_verified": false,
+    "general_application_quality_verified": false
+  },
+  "mcp_agent_gpu_interrupt": {
+    "report": "reports/mcp-agent-gpu/report.json",
+    "article": "notes/mcp-agent.html#gpu-abort",
+    "outcome": "infrastructure_abort_foreign_compute_client",
+    "graded_completed_cases": 0,
+    "model_POST_reservations": 5,
+    "HTTP200_headers": 4,
+    "complete_wire_bodies_saved": false,
+    "cleanup_verified": true,
+    "retry_performed": false
   }
 }

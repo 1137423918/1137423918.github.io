@@ -1,4 +1,0 @@
-{"case": "legacy", "status": "ready_for_review", "tools": 4}
-{"case": "indexed", "status": "ready_for_review", "tools": 4}
-{"case": "indexed-checkpoint", "status": "ready_for_review", "tools": 4}
-{"cases": 3, "same_patch": true, "original_pages_preserved": true}

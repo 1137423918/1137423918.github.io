@@ -1,8 +1,0 @@
-{
-  "phase": "lint-source-cache",
-  "returncode": 1,
-  "expected_returncode": 0,
-  "wall_seconds": 16.866,
-  "guard_reason": null,
-  "peak_sampled_owned_session_rss_bytes": 518086656
-}
